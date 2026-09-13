@@ -1,0 +1,10 @@
+{
+  "name": "FitLean",
+  "description": "Plataforma moderna de emagrecimento, treinos personalizados, alimentação saudável e acompanhamento de progresso.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

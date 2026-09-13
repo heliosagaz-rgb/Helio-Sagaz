@@ -1,0 +1,1909 @@
+{
+  "users": [
+    {
+      "id": "usr_admin",
+      "name": "Administrador FitLean",
+      "email": "admin@fitlean.com",
+      "role": "admin",
+      "password_salt": "4dc64a6b86a3e6606c97a768d4dea487",
+      "password_hash": "d4c0e41c214fdbe25ba000be9b0a86fc9e445e13b408b3716b6ed7b4286220b60aa3c3a88b79481182dfb187376a8c46efb56f325bc03f9f34273b4fcf1b4665",
+      "age": 32,
+      "gender": "masculino",
+      "height": 178,
+      "current_weight": 75,
+      "target_weight": 72,
+      "goal": "melhorar_condicao",
+      "experience_level": "avancado",
+      "training_location": "ambos",
+      "equipment": "completo",
+      "training_days": 5,
+      "time_available": 45,
+      "units": "metric",
+      "notifications_enabled": true,
+      "onboarding_completed": true,
+      "created_at": "2026-08-14T22:14:49.538Z"
+    },
+    {
+      "id": "usr_demo",
+      "name": "Ana Silva",
+      "email": "demo@fitlean.com",
+      "role": "user",
+      "password_salt": "b1fb27be57b9993a823bc92387808caf",
+      "password_hash": "2350ece90769d39e3d1f2734f14b19c9a295f8808d01dfcd86c4e42de91c0fc181b0e2e0a58e21e3071900a0e3d554d9b19a4f7ecc0cbd01c233f7146f086e11",
+      "age": 29,
+      "gender": "feminino",
+      "height": 165,
+      "current_weight": 73,
+      "target_weight": 65,
+      "goal": "perder_peso",
+      "experience_level": "iniciante",
+      "training_location": "casa",
+      "equipment": "nenhum",
+      "training_days": 4,
+      "time_available": 30,
+      "units": "metric",
+      "notifications_enabled": true,
+      "onboarding_completed": true,
+      "created_at": "2026-08-23T22:14:49.538Z"
+    },
+    {
+      "id": "usr_1789338252853_26c65c29",
+      "email": "heliosagaz3@gmail.com",
+      "role": "user",
+      "password_salt": "be0eff8dfda948e29ed33f4c04006998",
+      "password_hash": "305b9c4e40939281b5048534884392fc56bc397ecc08ab0286d784e25d29b2c75866ab21e02ca012f79f626a5fd4b291c6e6b9867093721238b2dc89bae72031",
+      "current_weight": 73,
+      "target_weight": 65,
+      "units": "metric",
+      "notifications_enabled": true,
+      "onboarding_completed": true,
+      "created_at": "2026-09-13T22:24:12.853Z",
+      "age": 18,
+      "gender": "masculino",
+      "height": 190,
+      "goal": "reduzir_gordura_abdominal",
+      "experience_level": "iniciante",
+      "training_location": "casa",
+      "equipment": "nenhum",
+      "training_days": 4,
+      "time_available": 30,
+      "name": "Heliosagaz3"
+    }
+  ],
+  "exercises": [
+    {
+      "id": "ex_burpees",
+      "name": "Burpees",
+      "category": "corpo_inteiro",
+      "muscle_group": "Corpo Inteiro, Cardio, Peito, Pernas",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "10-12",
+      "rest_seconds": 60,
+      "description": "Exercício calisténico completo de alta queima calórica e ativação cardiovascular.",
+      "instructions": [
+        "Comece em pé com os pés afastados na largura dos ombros.",
+        "Agache e apoie as duas mãos no chão à sua frente.",
+        "Dê um salto para trás com os pés, caindo na posição de prancha e faça uma flexão.",
+        "Salte com os pés de volta para perto das mãos.",
+        "Dê um salto explosivo para cima, estendendo os braços acima da cabeça."
+      ],
+      "tips": [
+        "Mantenha o core contraído para não forçar a lombar",
+        "Respire ritmicamente em cada repetição"
+      ],
+      "calories_per_min": 12,
+      "image_url": "https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=800&auto=format&fit=crop&q=80",
+      "gif_url": "https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "burpee"
+    },
+    {
+      "id": "ex_jumping_jacks",
+      "name": "Polichinelos (Jumping Jacks)",
+      "category": "corpo_inteiro",
+      "muscle_group": "Cardio, Pernas, Ombros",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "45 segundos",
+      "rest_seconds": 30,
+      "description": "Exercício dinâmico ideal para aquecimento e elevação rápida da frequência cardíaca.",
+      "instructions": [
+        "Fique em pé com os braços estendidos ao longo do corpo e pés juntos.",
+        "Dê um salto suave abrindo as pernas e levantando os braços acima da cabeça.",
+        "Retorne à posição inicial com outro salto suave.",
+        "Aterrisse sempre com a ponta dos pés para amortecer o impacto."
+      ],
+      "tips": [
+        "Mantenha os joelhos ligeiramente destravados na aterrissagem"
+      ],
+      "calories_per_min": 9,
+      "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "jumping_jacks"
+    },
+    {
+      "id": "ex_mountain_climbers",
+      "name": "Mountain Climbers (Escaladores)",
+      "category": "corpo_inteiro",
+      "muscle_group": "Abdómen, Ombros, Quadríceps",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "30 segundos",
+      "rest_seconds": 45,
+      "description": "Movimento contínuo em prancha alta que queima gordura e fortalece a parede abdominal.",
+      "instructions": [
+        "Inicie na posição de prancha alta com os pulsos alinhados sob os ombros.",
+        "Leve um joelho em direção ao peito sem elevar os quadris.",
+        "Alterne as pernas rapidamente de forma contínua como se estivesse a escalar.",
+        "Mantenha a coluna neutra e o abdómen bem ativo."
+      ],
+      "tips": [
+        "Não deixe os quadris subirem excessivamente"
+      ],
+      "calories_per_min": 10,
+      "image_url": "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "mountain_climbers"
+    },
+    {
+      "id": "ex_bear_crawl",
+      "name": "Bear Crawl (Engatinhar de Urso)",
+      "category": "corpo_inteiro",
+      "muscle_group": "Core, Ombros, Pernas",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "10 metros",
+      "rest_seconds": 60,
+      "description": "Exercício funcional que trabalha estabilidade, coordenação motora e queima calórica.",
+      "instructions": [
+        "Posicione-se em quatro apoios com os joelhos a 90 graus e a poucos centímetros do chão.",
+        "Avance a mão direita e o pé esquerdo simultaneamente.",
+        "Depois avance a mão esquerda e o pé direito com as costas sempre retas.",
+        "Mantenha os joelhos flutuando perto do piso durante todo o trajeto."
+      ],
+      "calories_per_min": 10,
+      "image_url": "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "bear_crawl"
+    },
+    {
+      "id": "ex_agachamento_livre",
+      "name": "Agachamento Livre",
+      "category": "pernas",
+      "muscle_group": "Quadríceps, Glúteos, Posterior de Coxa",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "12-15",
+      "rest_seconds": 60,
+      "description": "O rei dos exercícios para membros inferiores. Constrói força e queima muitas calorias.",
+      "instructions": [
+        "Coloque os pés afastados na largura dos ombros, pontas ligeiramente para fora.",
+        "Mantenha o peito aberto, olhar para a frente e abdómen ativado.",
+        "Desça os quadris para trás e para baixo como se fosse sentar numa cadeira imaginária.",
+        "Desça até as coxas ficarem paralelas ao chão mantendo os calcanhares firmes.",
+        "Empurre o chão com os calcanhares para retornar à posição ereta."
+      ],
+      "tips": [
+        "Não deixe os joelhos desabarem para dentro",
+        "Mantenha a curvatura natural da coluna"
+      ],
+      "calories_per_min": 8,
+      "image_url": "https://images.unsplash.com/photo-1574680096145-d05b474e2155?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "squat"
+    },
+    {
+      "id": "ex_afundo_passada",
+      "name": "Afundo (Lunges)",
+      "category": "pernas",
+      "muscle_group": "Quadríceps, Glúteos, Panturrilhas",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "10 cada perna",
+      "rest_seconds": 45,
+      "description": "Trabalho unilateral de pernas excelente para corrigir assimetrias e tonificar coxas.",
+      "instructions": [
+        "Fique em pé com a coluna ereta e as mãos na cintura.",
+        "Dê um passo largo para a frente com a perna direita.",
+        "Flexione ambos os joelhos até formarem ângulos de 90 graus.",
+        "O joelho de trás deve quase tocar o solo sem bater.",
+        "Empurre o pé da frente para voltar e repita com a outra perna."
+      ],
+      "calories_per_min": 8,
+      "image_url": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "lunge"
+    },
+    {
+      "id": "ex_agachamento_sumo",
+      "name": "Agachamento Sumô",
+      "category": "pernas",
+      "muscle_group": "Adutores (Parte interna da coxa), Glúteos",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "12",
+      "rest_seconds": 60,
+      "description": "Variação de agachamento com foco intenso nos adutores e na região dos glúteos.",
+      "instructions": [
+        "Afaste os pés mais do que a largura dos ombros, com as pontas viradas a 45 graus para fora.",
+        "Mantenha o tronco o mais vertical possível durante a descida.",
+        "Agache empurrando os joelhos na mesma direção da ponta dos pés.",
+        "Suba contraindo os glúteos e a parte interna das coxas no topo."
+      ],
+      "calories_per_min": 8,
+      "image_url": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "sumo_squat"
+    },
+    {
+      "id": "ex_elevacao_gemeos",
+      "name": "Elevação de Panturrilhas",
+      "category": "pernas",
+      "muscle_group": "Gastrocnêmio, Sóleo (Panturrilhas)",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 4,
+      "reps": "20",
+      "rest_seconds": 30,
+      "description": "Fortalece os gémeos, melhora o retorno venoso e a impulsão.",
+      "instructions": [
+        "Apoie os pés numa borda ou degrau, segurando numa parede para equilíbrio.",
+        "Deixe os calcanhares descerem para sentir o alongamento da panturrilha.",
+        "Empurre a ponta dos pés para subir o mais alto que conseguir.",
+        "Faça uma pausa de 1 segundo na contração máxima e repita."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "calf_raise"
+    },
+    {
+      "id": "ex_elevacao_pelvica",
+      "name": "Elevação Pélvica (Ponte de Glúteos)",
+      "category": "gluteos",
+      "muscle_group": "Glúteo Máximo, Isquiotibiais, Lombar",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "15",
+      "rest_seconds": 45,
+      "description": "Ativação máxima e isolada dos glúteos com proteção para a coluna.",
+      "instructions": [
+        "Deite-se de barriga para cima com os joelhos dobrados e os pés apoiados no chão.",
+        "Pressione os calcanhares contra o solo e eleve os quadris até alinhar joelhos, ancas e ombros.",
+        "Aperte os glúteos com força no ponto mais alto durante 2 segundos.",
+        "Retorne de forma controlada quase tocando o solo antes de iniciar a próxima repetição."
+      ],
+      "tips": [
+        "Não arqueie a lombar além da linha neutra"
+      ],
+      "calories_per_min": 6,
+      "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "glute_bridge"
+    },
+    {
+      "id": "ex_quatro_apoios_gluteo",
+      "name": "Glúteo 4 Apoios (Coice)",
+      "category": "gluteos",
+      "muscle_group": "Glúteo Máximo",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "15 cada lado",
+      "rest_seconds": 45,
+      "description": "Movimento de extensão do quadril que desenha e tonifica o glúteo.",
+      "instructions": [
+        "Apoie as mãos e os joelhos num tapete com o abdómen contraído.",
+        "Mantendo o joelho flexionado a 90 graus, eleve a perna empurrando a sola do pé em direção ao teto.",
+        "Contraia o glúteo no topo sem rodar a bacia.",
+        "Desça devagar e repita."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "donkey_kicks"
+    },
+    {
+      "id": "ex_abducao_deitada",
+      "name": "Abdução de Quadril Deitada",
+      "category": "gluteos",
+      "muscle_group": "Glúteo Médio, Estabilizadores do Quadril",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "15-20 cada perna",
+      "rest_seconds": 30,
+      "description": "Fortalece o glúteo médio, essencial para estabilidade do joelho e formato lateral da anca.",
+      "instructions": [
+        "Deite-se de lado com as pernas esticadas e cabeça apoiada no braço.",
+        "Mantendo a ponta do pé levemente apontada para baixo, levante a perna superior.",
+        "Sinta a contração na lateral da bacia e desça controladamente sem relaxar.",
+        "Repita do outro lado."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1518310383802-640c2de311b2?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "side_leg_raise"
+    },
+    {
+      "id": "ex_prancha_isometrica",
+      "name": "Prancha Isométrica",
+      "category": "abdomen",
+      "muscle_group": "Transverso do Abdómen, Reto Abdominal, Oblíquos",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "30-45 segundos",
+      "rest_seconds": 45,
+      "description": "Fundamental para estabilidade da coluna, postura e afinar a linha de cintura.",
+      "instructions": [
+        "Apoie os antebraços no chão, com os cotovelos alinhados sob os ombros.",
+        "Estenda as pernas para trás apoiando-se na ponta dos pés.",
+        "Mantenha o corpo em linha reta da cabeça aos calcanhares.",
+        "Puxe o umbigo para dentro em direção à coluna e mantenha a respiração estável."
+      ],
+      "tips": [
+        "Não deixe o quadril desabar nem ficar pontiagudo"
+      ],
+      "calories_per_min": 6,
+      "image_url": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "plank"
+    },
+    {
+      "id": "ex_abdominal_crunch",
+      "name": "Abdominal Crunch Tradicional",
+      "category": "abdomen",
+      "muscle_group": "Reto Abdominal Superior",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "15-20",
+      "rest_seconds": 45,
+      "description": "Clássico para fortalecimento e definição da musculatura frontal do abdómen.",
+      "instructions": [
+        "Deite-se de costas com joelhos dobrados e pés firmes no chão.",
+        "Coloque as pontas dos dedos atrás das orelhas sem puxar o pescoço.",
+        "Eleve as escápulas do chão enrolando o tronco pela força do abdómen.",
+        "Solte o ar na subida e controle a descida inspirando."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "crunch"
+    },
+    {
+      "id": "ex_abdominal_bicicleta",
+      "name": "Abdominal Bicicleta (Bicycle Crunch)",
+      "category": "abdomen",
+      "muscle_group": "Oblíquos e Reto Abdominal",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "20 alternados",
+      "rest_seconds": 45,
+      "description": "Estudo de biomecânica apontou como um dos exercícios mais eficazes para o abdómen e oblíquos.",
+      "instructions": [
+        "Deite-se com as mãos atrás da cabeça e pernas elevadas em 90 graus.",
+        "Gire o tronco levando o cotovelo direito até o joelho esquerdo enquanto estende a perna direita.",
+        "Alterne o movimento de forma contínua, pedalando com as pernas.",
+        "Evite puxar o pescoço com os braços."
+      ],
+      "calories_per_min": 7,
+      "image_url": "https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "bicycle_crunch"
+    },
+    {
+      "id": "ex_prancha_lateral",
+      "name": "Prancha Lateral",
+      "category": "abdomen",
+      "muscle_group": "Oblíquos, Quadrado Lombar",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "30s cada lado",
+      "rest_seconds": 45,
+      "description": "Exercício estático de ouro para afinar a cintura e proteger a coluna lombar.",
+      "instructions": [
+        "Deite-se de lado, apoiando o antebraço logo abaixo do ombro.",
+        "Empurre o solo e eleve os quadris até o corpo formar uma linha reta da cabeça aos pés.",
+        "Mantenha a posição sustentando a contração na lateral do abdómen.",
+        "Troque de lado após o tempo indicado."
+      ],
+      "calories_per_min": 6,
+      "image_url": "https://images.unsplash.com/photo-1566241142559-40e1dab266c6?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "side_plank"
+    },
+    {
+      "id": "ex_flexao_bracos",
+      "name": "Flexão de Braços (Push-ups)",
+      "category": "peito",
+      "muscle_group": "Peitoral Maior, Tríceps, Deltoide Anterior",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "10-15",
+      "rest_seconds": 60,
+      "description": "Construtor fundamental de força no tronco superior. Para iniciantes, pode ser feito com joelhos no chão.",
+      "instructions": [
+        "Posicione as mãos no chão um pouco mais afastadas que a largura dos ombros.",
+        "Mantenha as pernas esticadas e o abdómen travado em prancha firme.",
+        "Dobre os cotovelos a cerca de 45 graus em relação ao tronco e desça o peito até próximo ao piso.",
+        "Empurre o chão com vigor até estender os braços completamente."
+      ],
+      "tips": [
+        "Iniciantes podem apoiar os joelhos no colchonete mantendo o alinhamento da anca"
+      ],
+      "calories_per_min": 8,
+      "image_url": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "pushup"
+    },
+    {
+      "id": "ex_flexao_inclinada",
+      "name": "Flexão Inclinada no Sofá/Mesa",
+      "category": "peito",
+      "muscle_group": "Peitoral Inferior, Tríceps",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "12-15",
+      "rest_seconds": 45,
+      "description": "Versão mais suave da flexão, excelente para quem está a começar a ganhar força no peitoral.",
+      "instructions": [
+        "Apoie as mãos numa superfície elevada e firme (banco, sofá ou mesa baixa).",
+        "Afaste os pés até formar uma linha reta com o corpo.",
+        "Desça o peitoral até tocar levemente na borda da superfície.",
+        "Empurre com força controlada para retornar."
+      ],
+      "calories_per_min": 6,
+      "image_url": "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "incline_pushup"
+    },
+    {
+      "id": "ex_supino_halteres",
+      "name": "Supino Reto com Halteres",
+      "category": "peito",
+      "muscle_group": "Peitoral Maior, Tríceps",
+      "difficulty": "intermediario",
+      "equipment": "halteres",
+      "sets": 3,
+      "reps": "10-12",
+      "rest_seconds": 60,
+      "description": "Permite maior amplitude de movimento articular e trabalho equilibrado entre os dois lados do peito.",
+      "instructions": [
+        "Deite-se no banco ou chão com um haltere em cada mão ao lado do peito.",
+        "Mantenha os cotovelos a 45 graus e empurre os halteres para cima sem tocar um no outro.",
+        "Desça controlando o peso até sentir o peitoral alongar.",
+        "Repita mantendo as escápulas retraídas."
+      ],
+      "calories_per_min": 7,
+      "image_url": "https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "dumbbell_press"
+    },
+    {
+      "id": "ex_superman",
+      "name": "Superman (Extensão Lombar no Solo)",
+      "category": "costas",
+      "muscle_group": "Eretores da Espinha, Glúteos, Trapézio",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "12",
+      "rest_seconds": 45,
+      "description": "Corrige a postura encurvada do dia a dia e fortalece todas as cadeias posteriores das costas.",
+      "instructions": [
+        "Deite-se de barriga para baixo com braços estendidos à frente da cabeça e pernas esticadas.",
+        "Levante os braços, peito e pernas simultaneamente alguns centímetros do solo.",
+        "Segure a contração por 2 segundos sentindo as costas e os glúteos.",
+        "Desça devagar e repita suavemente."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "superman"
+    },
+    {
+      "id": "ex_remada_curvada_halteres",
+      "name": "Remada Curvada com Halteres",
+      "category": "costas",
+      "muscle_group": "Dorsal, Romboides, Bíceps",
+      "difficulty": "intermediario",
+      "equipment": "halteres",
+      "sets": 3,
+      "reps": "12",
+      "rest_seconds": 60,
+      "description": "Um dos melhores exercícios para densidade dorsal, melhora da postura e queima de calorias.",
+      "instructions": [
+        "Incline o tronco para a frente a cerca de 45 graus, com joelhos semiflexionados e costas retas.",
+        "Segure um haltere em cada mão com os braços estendidos para baixo.",
+        "Puxe os halteres em direção à cintura, aproximando as escápulas no final.",
+        "Abaixe os pesos de forma controlada sem arredondar as costas."
+      ],
+      "calories_per_min": 7,
+      "image_url": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "bent_over_row"
+    },
+    {
+      "id": "ex_remada_toalha",
+      "name": "Remada Invertida com Toalha/Porta",
+      "category": "costas",
+      "muscle_group": "Dorsal, Bíceps, Ombros Posteriores",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "12-15",
+      "rest_seconds": 45,
+      "description": "Alternativa caseira perfeita para trabalhar as costas sem qualquer equipamento pesado.",
+      "instructions": [
+        "Prenda uma toalha resistente num ponto fixo ou segure no batente firme de uma porta.",
+        "Incline o corpo para trás com os calcanhares apoiados e braços estendidos.",
+        "Puxe o peito em direção à toalha, aproximando as escápulas.",
+        "Controle o retorno até estender os braços novamente."
+      ],
+      "calories_per_min": 6,
+      "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "towel_row"
+    },
+    {
+      "id": "ex_desenvolvimento_halteres",
+      "name": "Desenvolvimento de Ombros (Shoulder Press)",
+      "category": "ombros",
+      "muscle_group": "Deltoides, Trapézio, Tríceps",
+      "difficulty": "intermediario",
+      "equipment": "halteres",
+      "sets": 3,
+      "reps": "10-12",
+      "rest_seconds": 60,
+      "description": "Movimento vertical fundamental para deltoides fortes e harmonia estética superior.",
+      "instructions": [
+        "Fique em pé com os pés afastados na largura dos quadris e halteres na altura das orelhas.",
+        "Empurre os halteres para cima até os braços ficarem estendidos acima da cabeça.",
+        "Não arqueie as costas nem utilize impulso com os joelhos.",
+        "Desça lentamente até a posição inicial na linha das orelhas."
+      ],
+      "calories_per_min": 6,
+      "image_url": "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "shoulder_press"
+    },
+    {
+      "id": "ex_elevacao_lateral",
+      "name": "Elevação Lateral",
+      "category": "ombros",
+      "muscle_group": "Deltoide Lateral (Ombro lateral)",
+      "difficulty": "iniciante",
+      "equipment": "halteres",
+      "sets": 3,
+      "reps": "12-15",
+      "rest_seconds": 45,
+      "description": "Cria o visual de ombros arredondados e ajuda a afinar visualmente a cintura.",
+      "instructions": [
+        "Fique em pé ereto segurando um haltere leve (ou garrafas de água) ao lado das coxas.",
+        "Com os cotovelos ligeiramente flexionados, levante os braços para os lados até a altura dos ombros.",
+        "Evite dar solavancos com o corpo.",
+        "Desça em 2 segundos mantendo o controle total do peso."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "lateral_raise"
+    },
+    {
+      "id": "ex_pike_pushup",
+      "name": "Pike Push-up (Flexão em V)",
+      "category": "ombros",
+      "muscle_group": "Deltoides Anteriores, Tríceps",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "8-10",
+      "rest_seconds": 60,
+      "description": "Flexão calisténica com ênfase nos ombros, sem precisar de halteres.",
+      "instructions": [
+        "Coloque as mãos e pés no chão formando um \"V\" invertido com o corpo.",
+        "Mantenha os quadris apontados para o alto e os braços retos.",
+        "Dobre os cotovelos descendo a cabeça diagonalmente em direção ao piso entre as mãos.",
+        "Empurre o chão de volta para a posição de \"V\" invertido."
+      ],
+      "calories_per_min": 7,
+      "image_url": "https://images.unsplash.com/photo-1598971639058-fab3c3109a00?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "pike_pushup"
+    },
+    {
+      "id": "ex_mergulho_banco",
+      "name": "Mergulho no Banco/Cadeira (Dips)",
+      "category": "bracos",
+      "muscle_group": "Tríceps, Peitoral Inferior",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "12-15",
+      "rest_seconds": 45,
+      "description": "Excelente para tonificar a parte de trás do braço (\"adeus\"), usando apenas uma cadeira ou sofá firme.",
+      "instructions": [
+        "Sente-se na borda de uma cadeira estável e apoie as palmas das mãos ao lado dos quadris.",
+        "Dê um passo à frente com os pés tirando os glúteos da cadeira.",
+        "Dobre os cotovelos descendo o corpo até que os braços formem cerca de 90 graus.",
+        "Empurre as palmas das mãos para estender os braços e retornar ao topo."
+      ],
+      "tips": [
+        "Mantenha as costas próximas à cadeira para não sobrecarregar os ombros"
+      ],
+      "calories_per_min": 6,
+      "image_url": "https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "bench_dips"
+    },
+    {
+      "id": "ex_rosca_biceps_halteres",
+      "name": "Rosca Direta de Bíceps",
+      "category": "bracos",
+      "muscle_group": "Bíceps Braquial, Antebraço",
+      "difficulty": "iniciante",
+      "equipment": "halteres",
+      "sets": 3,
+      "reps": "12",
+      "rest_seconds": 45,
+      "description": "Movimento clássico e eficiente para força e definição dos braços.",
+      "instructions": [
+        "Fique em pé com as palmas voltadas para a frente segurando os halteres.",
+        "Mantenha os cotovelos colados nas costelas sem balançar o corpo.",
+        "Flexione os cotovelos trazendo os pesos em direção aos ombros.",
+        "Abaixe controladamente até estender os braços."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "bicep_curl"
+    },
+    {
+      "id": "ex_extensao_triceps_frances",
+      "name": "Tríceps Francês com Haltere",
+      "category": "bracos",
+      "muscle_group": "Tríceps (Porção longa)",
+      "difficulty": "intermediario",
+      "equipment": "halteres",
+      "sets": 3,
+      "reps": "12",
+      "rest_seconds": 45,
+      "description": "Alongamento profundo e contração da cabeça longa do tríceps.",
+      "instructions": [
+        "Segure um haltere com as duas mãos acima da cabeça, braços esticados.",
+        "Mantendo os cotovelos apontados para a frente e parados, dobre os antebraços para trás da cabeça.",
+        "Estenda os cotovelos trazendo o peso de volta acima da cabeça.",
+        "Mantenha o abdómen firme para estabilizar o tronco."
+      ],
+      "calories_per_min": 5,
+      "image_url": "https://images.unsplash.com/photo-1534367507873-d2d7e24c797f?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "overhead_triceps"
+    },
+    {
+      "id": "ex_corrida_parada",
+      "name": "Corrida Estacionária com Joelhos Altos",
+      "category": "cardio",
+      "muscle_group": "Cardio, Flexores de Quadril, Panturrilhas",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "40 segundos",
+      "rest_seconds": 30,
+      "description": "Eleva a pulsação de imediato e acelera o metabolismo em qualquer espaço.",
+      "instructions": [
+        "Comece no mesmo lugar simulando uma corrida ágil.",
+        "Eleve os joelhos até a altura da cintura alternadamente.",
+        "Acompanhe o movimento com os braços sincronizados.",
+        "Mantenha o abdómen levemente contraído e aterrisse suavemente."
+      ],
+      "calories_per_min": 11,
+      "image_url": "https://images.unsplash.com/photo-1434682881908-b43d0467b798?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "high_knees"
+    },
+    {
+      "id": "ex_saltos_corda_imaginaria",
+      "name": "Pular Corda (Real ou Simulada)",
+      "category": "cardio",
+      "muscle_group": "Cardio, Panturrilhas, Ombros",
+      "difficulty": "iniciante",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "60 segundos",
+      "rest_seconds": 30,
+      "description": "Queimador de calorias super prático e com baixo impacto articular se feito na ponta dos pés.",
+      "instructions": [
+        "Posicione as mãos ao lado dos quadris simulando segurar as pontas de uma corda.",
+        "Faça giros rápidos com os pulsos enquanto salta alguns centímetros do solo.",
+        "Mantenha um ritmo constante e respiração fluida.",
+        "Aterrisse suavemente na meia-ponta dos pés."
+      ],
+      "calories_per_min": 12,
+      "image_url": "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "jump_rope"
+    },
+    {
+      "id": "ex_patinadores",
+      "name": "Skaters (Saltos Laterais de Patinador)",
+      "category": "cardio",
+      "muscle_group": "Cardio, Glúteo Médio, Estabilidade",
+      "difficulty": "intermediario",
+      "equipment": "nenhum",
+      "sets": 3,
+      "reps": "30 segundos",
+      "rest_seconds": 40,
+      "description": "Movimento pliométrico lateral que melhora agilidade, queima gordura e tonifica as pernas.",
+      "instructions": [
+        "Dê um salto lateral para a direita, aterrissando no pé direito com o joelho semiflexionado.",
+        "Passe a perna esquerda por trás em diagonal sem apoiar o pé no chão.",
+        "Salte imediatamente para a esquerda, aterrissando no pé esquerdo.",
+        "Use os braços para manter o equilíbrio e ritmo dinâmico."
+      ],
+      "calories_per_min": 11,
+      "image_url": "https://images.unsplash.com/photo-1599058917212-d750089bc07e?w=800&auto=format&fit=crop&q=80",
+      "animation_type": "skaters"
+    }
+  ],
+  "workouts": [
+    {
+      "id": "wk_fullbody_iniciante",
+      "name": "Treino Full Body Iniciante",
+      "subtitle": "Ativação completa e queima equilibrada",
+      "difficulty": "iniciante",
+      "duration_minutes": 25,
+      "target_goal": "perder_peso",
+      "category": "corpo_inteiro",
+      "location": "casa",
+      "calories_burned_est": 210,
+      "exercise_ids": [
+        "ex_jumping_jacks",
+        "ex_agachamento_livre",
+        "ex_flexao_inclinada",
+        "ex_elevacao_pelvica",
+        "ex_prancha_isometrica",
+        "ex_corrida_parada"
+      ]
+    },
+    {
+      "id": "wk_queima_hiit_express",
+      "name": "HIIT Queima Rápida 20 Minutos",
+      "subtitle": "Alta intensidade para acelerar o metabolismo",
+      "difficulty": "intermediario",
+      "duration_minutes": 20,
+      "target_goal": "reduzir_gordura",
+      "category": "cardio",
+      "location": "casa",
+      "calories_burned_est": 260,
+      "exercise_ids": [
+        "ex_jumping_jacks",
+        "ex_burpees",
+        "ex_mountain_climbers",
+        "ex_patinadores",
+        "ex_saltos_corda_imaginaria",
+        "ex_abdominal_bicicleta"
+      ]
+    },
+    {
+      "id": "wk_pernas_gluteos_firmes",
+      "name": "Pernas e Glúteos Definidos",
+      "subtitle": "Foco total em membros inferiores e postura",
+      "difficulty": "iniciante",
+      "duration_minutes": 30,
+      "target_goal": "melhorar_condicao",
+      "category": "pernas",
+      "location": "casa",
+      "calories_burned_est": 240,
+      "exercise_ids": [
+        "ex_agachamento_livre",
+        "ex_afundo_passada",
+        "ex_agachamento_sumo",
+        "ex_elevacao_pelvica",
+        "ex_quatro_apoios_gluteo",
+        "ex_elevacao_gemeos"
+      ]
+    },
+    {
+      "id": "wk_abdomen_trincado",
+      "name": "Core & Abdómen Plano",
+      "subtitle": "Fortalecimento do transverso e oblíquos",
+      "difficulty": "iniciante",
+      "duration_minutes": 18,
+      "target_goal": "reduzir_gordura",
+      "category": "abdomen",
+      "location": "casa",
+      "calories_burned_est": 160,
+      "exercise_ids": [
+        "ex_prancha_isometrica",
+        "ex_abdominal_crunch",
+        "ex_abdominal_bicicleta",
+        "ex_prancha_lateral",
+        "ex_superman",
+        "ex_mountain_climbers"
+      ]
+    },
+    {
+      "id": "wk_superior_tonificado",
+      "name": "Superior e Braços Firmes",
+      "subtitle": "Peito, costas, ombros e tríceps sem gordura",
+      "difficulty": "intermediario",
+      "duration_minutes": 30,
+      "target_goal": "melhorar_condicao",
+      "category": "peito",
+      "location": "ambos",
+      "calories_burned_est": 230,
+      "exercise_ids": [
+        "ex_flexao_bracos",
+        "ex_remada_toalha",
+        "ex_mergulho_banco",
+        "ex_pike_pushup",
+        "ex_superman",
+        "ex_elevacao_lateral"
+      ]
+    },
+    {
+      "id": "wk_fullbody_intensivo",
+      "name": "Full Body Avançado Calisténico",
+      "subtitle": "Desafio dinâmico com movimentos compostos",
+      "difficulty": "avancado",
+      "duration_minutes": 40,
+      "target_goal": "perder_peso",
+      "category": "corpo_inteiro",
+      "location": "casa",
+      "calories_burned_est": 380,
+      "exercise_ids": [
+        "ex_burpees",
+        "ex_agachamento_sumo",
+        "ex_flexao_bracos",
+        "ex_bear_crawl",
+        "ex_abdominal_bicicleta",
+        "ex_patinadores",
+        "ex_prancha_isometrica"
+      ]
+    },
+    {
+      "id": "wk_cardio_sem_impacto",
+      "name": "Cardio Suave & Mobilidade",
+      "subtitle": "Perfeito para dias leves e queima constante",
+      "difficulty": "iniciante",
+      "duration_minutes": 25,
+      "target_goal": "habitos_saudaveis",
+      "category": "cardio",
+      "location": "casa",
+      "calories_burned_est": 180,
+      "exercise_ids": [
+        "ex_jumping_jacks",
+        "ex_agachamento_livre",
+        "ex_superman",
+        "ex_elevacao_pelvica",
+        "ex_abducao_deitada",
+        "ex_saltos_corda_imaginaria"
+      ]
+    },
+    {
+      "id": "wk_ginasio_forca_emagrecimento",
+      "name": "Força & Definição com Pesos",
+      "subtitle": "Treino estruturado para queimar gordura e preservar massa",
+      "difficulty": "intermediario",
+      "duration_minutes": 45,
+      "target_goal": "perder_peso",
+      "category": "corpo_inteiro",
+      "location": "ginasio",
+      "calories_burned_est": 340,
+      "exercise_ids": [
+        "ex_supino_halteres",
+        "ex_remada_curvada_halteres",
+        "ex_desenvolvimento_halteres",
+        "ex_rosca_biceps_halteres",
+        "ex_extensao_triceps_frances",
+        "ex_afundo_passada"
+      ]
+    },
+    {
+      "id": "wk_gluteos_extra",
+      "name": "Especial Glúteos e Posterior",
+      "subtitle": "Desenho e firmeza muscular",
+      "difficulty": "intermediario",
+      "duration_minutes": 25,
+      "target_goal": "melhorar_condicao",
+      "category": "gluteos",
+      "location": "casa",
+      "calories_burned_est": 200,
+      "exercise_ids": [
+        "ex_elevacao_pelvica",
+        "ex_quatro_apoios_gluteo",
+        "ex_abducao_deitada",
+        "ex_agachamento_sumo",
+        "ex_afundo_passada"
+      ]
+    },
+    {
+      "id": "wk_express_15min",
+      "name": "Metabolismo Acelerado em 15 Minutos",
+      "subtitle": "Rápido, prático e sem desculpas",
+      "difficulty": "iniciante",
+      "duration_minutes": 15,
+      "target_goal": "perder_peso",
+      "category": "corpo_inteiro",
+      "location": "casa",
+      "calories_burned_est": 170,
+      "exercise_ids": [
+        "ex_jumping_jacks",
+        "ex_agachamento_livre",
+        "ex_mountain_climbers",
+        "ex_mergulho_banco",
+        "ex_prancha_isometrica"
+      ]
+    }
+  ],
+  "foods": [
+    {
+      "id": "f_ovo_cozido",
+      "name": "Ovo Cozido (1 unidade média)",
+      "category": "proteina",
+      "serving_size": "50g (1 ovo)",
+      "calories": 74,
+      "protein": 6.3,
+      "carbs": 0.4,
+      "fats": 5
+    },
+    {
+      "id": "f_peito_frango",
+      "name": "Peito de Frango Grelhado",
+      "category": "proteina",
+      "serving_size": "100g",
+      "calories": 165,
+      "protein": 31,
+      "carbs": 0,
+      "fats": 3.6
+    },
+    {
+      "id": "f_salmao",
+      "name": "Salmão Grelhado",
+      "category": "proteina",
+      "serving_size": "100g",
+      "calories": 208,
+      "protein": 22,
+      "carbs": 0,
+      "fats": 13
+    },
+    {
+      "id": "f_atum_lata_natural",
+      "name": "Atum em Lata (ao natural)",
+      "category": "proteina",
+      "serving_size": "100g",
+      "calories": 116,
+      "protein": 26,
+      "carbs": 0,
+      "fats": 1
+    },
+    {
+      "id": "f_queijo_cottage",
+      "name": "Queijo Cottage 0% ou Magro",
+      "category": "laticinio",
+      "serving_size": "100g",
+      "calories": 72,
+      "protein": 12,
+      "carbs": 3,
+      "fats": 1
+    },
+    {
+      "id": "f_iogurte_grego_natural",
+      "name": "Iogurte Grego Natural sem açúcar",
+      "category": "laticinio",
+      "serving_size": "150g",
+      "calories": 95,
+      "protein": 15,
+      "carbs": 4,
+      "fats": 1.5
+    },
+    {
+      "id": "f_arroz_integral",
+      "name": "Arroz Integral Cozido",
+      "category": "carboidrato",
+      "serving_size": "100g",
+      "calories": 112,
+      "protein": 2.6,
+      "carbs": 23.5,
+      "fats": 0.9
+    },
+    {
+      "id": "f_batata_doce",
+      "name": "Batata Doce Cozida / Assada",
+      "category": "carboidrato",
+      "serving_size": "100g",
+      "calories": 86,
+      "protein": 1.6,
+      "carbs": 20,
+      "fats": 0.1
+    },
+    {
+      "id": "f_aveia_flocos",
+      "name": "Aveia em Flocos",
+      "category": "carboidrato",
+      "serving_size": "40g (4 colheres)",
+      "calories": 150,
+      "protein": 5.5,
+      "carbs": 26,
+      "fats": 2.8
+    },
+    {
+      "id": "f_pao_integral",
+      "name": "Pão 100% Integral (1 fatia)",
+      "category": "carboidrato",
+      "serving_size": "30g",
+      "calories": 75,
+      "protein": 3.2,
+      "carbs": 13.5,
+      "fats": 0.9
+    },
+    {
+      "id": "f_banana",
+      "name": "Banana Média",
+      "category": "fruta",
+      "serving_size": "100g (1 un)",
+      "calories": 89,
+      "protein": 1.1,
+      "carbs": 23,
+      "fats": 0.3
+    },
+    {
+      "id": "f_maca",
+      "name": "Maçã com Casca",
+      "category": "fruta",
+      "serving_size": "130g (1 un)",
+      "calories": 68,
+      "protein": 0.4,
+      "carbs": 18,
+      "fats": 0.2
+    },
+    {
+      "id": "f_morangos",
+      "name": "Morangos Frescos",
+      "category": "fruta",
+      "serving_size": "100g",
+      "calories": 32,
+      "protein": 0.7,
+      "carbs": 7.7,
+      "fats": 0.3
+    },
+    {
+      "id": "f_abacate",
+      "name": "Abacate Fresco",
+      "category": "gordura_saudavel",
+      "serving_size": "50g",
+      "calories": 80,
+      "protein": 1,
+      "carbs": 4,
+      "fats": 7.5
+    },
+    {
+      "id": "f_azeite_oliva",
+      "name": "Azeite de Oliva Extra Virgem",
+      "category": "gordura_saudavel",
+      "serving_size": "1 colher de sopa (13ml)",
+      "calories": 119,
+      "protein": 0,
+      "carbs": 0,
+      "fats": 13.5
+    },
+    {
+      "id": "f_nozes",
+      "name": "Nozes ou Amêndoas",
+      "category": "gordura_saudavel",
+      "serving_size": "30g (um punhado)",
+      "calories": 185,
+      "protein": 6,
+      "carbs": 6,
+      "fats": 16
+    },
+    {
+      "id": "f_pasta_amendoim",
+      "name": "Pasta de Amendoim Pura",
+      "category": "gordura_saudavel",
+      "serving_size": "15g (1 colher)",
+      "calories": 90,
+      "protein": 4,
+      "carbs": 3,
+      "fats": 7
+    },
+    {
+      "id": "f_brocolos",
+      "name": "Brócolos Cozidos",
+      "category": "vegetal",
+      "serving_size": "100g",
+      "calories": 35,
+      "protein": 2.4,
+      "carbs": 7,
+      "fats": 0.4
+    },
+    {
+      "id": "f_espinafre",
+      "name": "Espinafre Cozido ou Cru",
+      "category": "vegetal",
+      "serving_size": "100g",
+      "calories": 23,
+      "protein": 2.9,
+      "carbs": 3.6,
+      "fats": 0.4
+    },
+    {
+      "id": "f_cenoura",
+      "name": "Cenoura Crua ralada",
+      "category": "vegetal",
+      "serving_size": "100g",
+      "calories": 41,
+      "protein": 0.9,
+      "carbs": 9.6,
+      "fats": 0.2
+    },
+    {
+      "id": "f_tomate",
+      "name": "Tomate Fresco",
+      "category": "vegetal",
+      "serving_size": "100g",
+      "calories": 18,
+      "protein": 0.9,
+      "carbs": 3.9,
+      "fats": 0.2
+    },
+    {
+      "id": "f_feijao_preto",
+      "name": "Feijão Preto Cozido",
+      "category": "carboidrato",
+      "serving_size": "100g",
+      "calories": 132,
+      "protein": 8.9,
+      "carbs": 23.7,
+      "fats": 0.5
+    },
+    {
+      "id": "f_grao_bico",
+      "name": "Grão-de-Bico Cozido",
+      "category": "carboidrato",
+      "serving_size": "100g",
+      "calories": 164,
+      "protein": 8.9,
+      "carbs": 27.4,
+      "fats": 2.6
+    },
+    {
+      "id": "f_tofu_firme",
+      "name": "Tofu Firme",
+      "category": "proteina",
+      "serving_size": "100g",
+      "calories": 83,
+      "protein": 10,
+      "carbs": 2,
+      "fats": 4.5
+    },
+    {
+      "id": "f_leite_desnatado",
+      "name": "Leite Magro / Desnatado",
+      "category": "bebida",
+      "serving_size": "200ml (1 copo)",
+      "calories": 70,
+      "protein": 6.8,
+      "carbs": 10,
+      "fats": 0.4
+    },
+    {
+      "id": "f_cafe_puro",
+      "name": "Café Preto sem Açúcar",
+      "category": "bebida",
+      "serving_size": "100ml",
+      "calories": 2,
+      "protein": 0.1,
+      "carbs": 0,
+      "fats": 0
+    },
+    {
+      "id": "f_cha_verde",
+      "name": "Chá Verde Infusão",
+      "category": "bebida",
+      "serving_size": "200ml",
+      "calories": 1,
+      "protein": 0,
+      "carbs": 0.2,
+      "fats": 0
+    },
+    {
+      "id": "f_carne_bovina_magra",
+      "name": "Carne de Vaca Magra Grelhada (Patinho/Alcatra)",
+      "category": "proteina",
+      "serving_size": "100g",
+      "calories": 170,
+      "protein": 29,
+      "carbs": 0,
+      "fats": 6
+    },
+    {
+      "id": "f_abobrinha",
+      "name": "Curgete / Abobrinha Cozida",
+      "category": "vegetal",
+      "serving_size": "100g",
+      "calories": 17,
+      "protein": 1.2,
+      "carbs": 3.1,
+      "fats": 0.3
+    },
+    {
+      "id": "f_kiwi",
+      "name": "Kiwi Fresco",
+      "category": "fruta",
+      "serving_size": "80g (1 un)",
+      "calories": 49,
+      "protein": 0.9,
+      "carbs": 12,
+      "fats": 0.4
+    },
+    {
+      "id": "f_semente_chia",
+      "name": "Sementes de Chia",
+      "category": "gordura_saudavel",
+      "serving_size": "15g (1 colher)",
+      "calories": 73,
+      "protein": 2.5,
+      "carbs": 6.3,
+      "fats": 4.6
+    }
+  ],
+  "recipes": [
+    {
+      "id": "rec_omelete_espinafre",
+      "name": "Omelete Proteica com Espinafre e Queijo",
+      "meal_type": "pequeno_almoco",
+      "prep_time": "10 min",
+      "calories": 250,
+      "protein": 21,
+      "carbs": 4,
+      "fats": 16,
+      "ingredients": [
+        "2 ovos inteiros + 1 clara",
+        "1 chávena de folhas de espinafre frescas",
+        "30g de queijo magro ralado",
+        "Fio de azeite",
+        "Sal e pimenta a gosto"
+      ],
+      "instructions": [
+        "Bata os ovos com sal e pimenta.",
+        "Aqueça uma frigideira antiaderente com umas gotas de azeite.",
+        "Refogue o espinafre por 1 minuto até murchar.",
+        "Despeje os ovos batidos e espalhe o queijo.",
+        "Dobre ao meio e sirva dourada."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1510693206972-df098062cb71?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_papas_aveia_frutos_vermelhos",
+      "name": "Papas de Aveia Quentes com Frutos Vermelhos",
+      "meal_type": "pequeno_almoco",
+      "prep_time": "8 min",
+      "calories": 290,
+      "protein": 11,
+      "carbs": 48,
+      "fats": 6,
+      "ingredients": [
+        "40g de aveia em flocos",
+        "180ml de leite magro ou água",
+        "1 colher de chá de canela em pó",
+        "50g de morangos ou mirtilos",
+        "1 colher de chá de sementes de chia"
+      ],
+      "instructions": [
+        "Num tacho pequeno junte a aveia, o leite e a canela.",
+        "Cozinhe em lume brando mexendo até obter consistência cremosa.",
+        "Transfira para uma taça e cubra com as frutas frescas e sementes de chia."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1517673132405-a56a62b18caf?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_panqueca_banana",
+      "name": "Panquecas Fit de Banana e Aveia",
+      "meal_type": "pequeno_almoco",
+      "prep_time": "12 min",
+      "calories": 280,
+      "protein": 14,
+      "carbs": 42,
+      "fats": 6,
+      "ingredients": [
+        "1 banana madura esmagada",
+        "2 ovos",
+        "3 colheres de sopa de aveia",
+        "Canela a gosto"
+      ],
+      "instructions": [
+        "Esmague a banana e misture muito bem com os 2 ovos e a aveia.",
+        "Deite pequenas conchas numa frigideira antiaderente bem quente.",
+        "Vire quando formar bolhas e doure o outro lado por 1 minuto."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1528207776546-365bb710ee93?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_frango_batata_doce",
+      "name": "Bowl de Frango Dourado com Batata Doce e Brócolos",
+      "meal_type": "almoco",
+      "prep_time": "25 min",
+      "calories": 420,
+      "protein": 42,
+      "carbs": 44,
+      "fats": 8,
+      "ingredients": [
+        "150g de peito de frango cortado em cubos",
+        "150g de batata doce cozida às rodelas",
+        "100g de brócolos ao vapor",
+        "1 colher de sobremesa de azeite",
+        "Alho picado, páprica doce e sal"
+      ],
+      "instructions": [
+        "Tempere o frango com alho, páprica e sal.",
+        "Grelhe os cubos no azeite até ficarem bem dourados.",
+        "Monte o prato com a batata doce assada/cozida e os brócolos.",
+        "Regue com um fio de azeite cru."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_salmao_legumes_assados",
+      "name": "Salmão Crocante com Legumes Coloridos Assados",
+      "meal_type": "jantar",
+      "prep_time": "20 min",
+      "calories": 460,
+      "protein": 36,
+      "carbs": 18,
+      "fats": 27,
+      "ingredients": [
+        "150g de lombo de salmão",
+        "1 curgete pequena em rodelas",
+        "1 cenoura em palitos",
+        "1 fio de azeite e sumo de limão",
+        "Ervas aromáticas (orégãos e tomilho)"
+      ],
+      "instructions": [
+        "Pré-aqueça o forno a 190°C.",
+        "Disponha os legumes e o salmão num tabuleiro forrado com papel vegetal.",
+        "Tempere com azeite, limão, sal e ervas aromáticas.",
+        "Asse por cerca de 15 a 18 minutos até o salmão estar no ponto e os legumes macios."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1467003909585-2f8a72700288?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_salada_atum_grao",
+      "name": "Salada Mediterrânica de Grão e Atum",
+      "meal_type": "almoco",
+      "prep_time": "10 min",
+      "calories": 380,
+      "protein": 32,
+      "carbs": 38,
+      "fats": 11,
+      "ingredients": [
+        "1 lata de atum ao natural escorrido",
+        "120g de grão-de-bico cozido",
+        "1 tomate picado",
+        "1/4 de cebola roxa picada",
+        "1 colher de sopa de azeite e vinagre"
+      ],
+      "instructions": [
+        "Numa taça, misture o grão-de-bico, o tomate, a cebola e o atum.",
+        "Tempere com azeite de oliva, vinagre de maçã, sal e salsa picada.",
+        "Envolva bem e sirva fresca."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1540420773420-3366772f4999?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_iogurte_parfait_nozes",
+      "name": "Parfait de Iogurte Grego com Nozes e Mel",
+      "meal_type": "lanche",
+      "prep_time": "5 min",
+      "calories": 220,
+      "protein": 16,
+      "carbs": 16,
+      "fats": 10,
+      "ingredients": [
+        "150g de iogurte grego natural 0%",
+        "15g de nozes picadas",
+        "1 colher de chá de mel puro",
+        "Mirtilos frescos a gosto"
+      ],
+      "instructions": [
+        "Coloque o iogurte numa taça.",
+        "Polvilhe com as nozes picadas e as bagas.",
+        "Finalize com o fio de mel."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1488477181946-6428a0291777?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_wrap_frango_abacate",
+      "name": "Wrap Integral Leve de Frango e Abacate",
+      "meal_type": "lanche",
+      "prep_time": "10 min",
+      "calories": 310,
+      "protein": 24,
+      "carbs": 26,
+      "fats": 12,
+      "ingredients": [
+        "1 tortilha 100% integral",
+        "80g de frango desfiado temperado",
+        "30g de abacate esmagado",
+        "Folhas de alface e fatias de tomate"
+      ],
+      "instructions": [
+        "Espalhe o abacate esmagado sobre a tortilha aquecida.",
+        "Adicione o frango desfiado, o tomate e as folhas.",
+        "Enrole com firmeza e corte ao meio."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1628840042765-356cda07504e?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_sopa_creme_abobora",
+      "name": "Creme Aveludado de Abóbora com Gengibre e Frango",
+      "meal_type": "jantar",
+      "prep_time": "25 min",
+      "calories": 240,
+      "protein": 22,
+      "carbs": 24,
+      "fats": 5,
+      "ingredients": [
+        "200g de abóbora limpa em cubos",
+        "1/2 cebola e 1 dente de alho",
+        "1 pedaço pequeno de gengibre fresco",
+        "80g de peito de frango cozido e desfiado",
+        "1 colher de chá de azeite"
+      ],
+      "instructions": [
+        "Cozinhe a abóbora com cebola, alho e gengibre em água ou caldo de legumes caseiro.",
+        "Quando estiver macia, triture no liquidificador até obter um creme sedoso.",
+        "Ajuste o sal e sirva com o frango desfiado por cima."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1476718406336-bb5a9690ee2a?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_tofu_grelhado_legumes",
+      "name": "Tofu Grelhado Crocante com Arroz Integral e Cogumelos",
+      "meal_type": "almoco",
+      "prep_time": "20 min",
+      "calories": 360,
+      "protein": 18,
+      "carbs": 45,
+      "fats": 12,
+      "ingredients": [
+        "120g de tofu prensado em cubos",
+        "80g de arroz integral cozido",
+        "80g de cogumelos frescos",
+        "1 colher de sopa de molho de soja baixo em sódio",
+        "1 colher de chá de azeite"
+      ],
+      "instructions": [
+        "Marine o tofu no molho de soja com pimenta por 10 minutos.",
+        "Grelhe numa frigideira quente com azeite até dourar todos os lados.",
+        "Salteie os cogumelos e sirva acompanhado do arroz integral."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_batido_verde_energia",
+      "name": "Batido Verde Detox e Energético",
+      "meal_type": "lanche",
+      "prep_time": "5 min",
+      "calories": 160,
+      "protein": 4,
+      "carbs": 32,
+      "fats": 2,
+      "ingredients": [
+        "1 chávena de folhas de espinafre",
+        "1 maçã verde com casca",
+        "1/2 pepino",
+        "Sumo de 1/2 limão",
+        "200ml de água de coco ou água mineral",
+        "Gelo a gosto"
+      ],
+      "instructions": [
+        "Coloque todos os ingredientes no liquidificador.",
+        "Bata na velocidade máxima até ficar completamente homogêneo.",
+        "Beba de imediato sem coar para manter as fibras ativas."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1556881286-fc6915169721?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_bife_patinho_salada",
+      "name": "Bife Magro Grelhado com Salada Colorida e Quinoa",
+      "meal_type": "almoco",
+      "prep_time": "15 min",
+      "calories": 410,
+      "protein": 38,
+      "carbs": 30,
+      "fats": 14,
+      "ingredients": [
+        "140g de bife de alcatra ou patinho magro",
+        "80g de quinoa cozida",
+        "Mix de alfaces, tomate cereja e pepino",
+        "1 colher de chá de azeite de oliva e orégãos"
+      ],
+      "instructions": [
+        "Grelhe o bife bem quente por 2 a 3 minutos de cada lado.",
+        "Tempere com sal e pimenta após selar.",
+        "Sirva com a quinoa morna e a salada fresca temperada com o azeite."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1544025162-d76694265947?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_muffins_ovo_legumes",
+      "name": "Muffins Salgados de Ovo com Legumes",
+      "meal_type": "lanche",
+      "prep_time": "20 min",
+      "calories": 180,
+      "protein": 15,
+      "carbs": 5,
+      "fats": 11,
+      "ingredients": [
+        "3 ovos inteiros",
+        "50g de brócolos picados finos",
+        "1/2 cenoura ralada",
+        "Sal, pimenta e ervas a gosto"
+      ],
+      "instructions": [
+        "Bata os ovos com os temperos.",
+        "Incorpore os legumes picados.",
+        "Distribua em 4 forminhas de silicone para muffin.",
+        "Asse a 180°C por 15 minutos até firmarem e dourarem."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1525351484163-7529414344d8?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_curry_grao_legumes",
+      "name": "Curry Cremoso de Grão com Leite de Coco Light",
+      "meal_type": "jantar",
+      "prep_time": "25 min",
+      "calories": 340,
+      "protein": 12,
+      "carbs": 46,
+      "fats": 11,
+      "ingredients": [
+        "150g de grão cozido",
+        "100ml de leite de coco light",
+        "1 curgete pequena picada",
+        "1 colher de chá de pasta de curry ou caril em pó",
+        "Coentros frescos para finalizar"
+      ],
+      "instructions": [
+        "Aqueça o curry com um pingo de água até perfumar.",
+        "Junte os legumes e o leite de coco, cozinhando por 10 minutos.",
+        "Acrescente o grão cozido e deixe apurar por 5 minutos.",
+        "Finalize com folhas de coentro."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1455619452474-d2be8b1e70cd?w=800&auto=format&fit=crop&q=80"
+    },
+    {
+      "id": "rec_pudim_chia_manga",
+      "name": "Pudim de Chia com Puré de Manga Fresca",
+      "meal_type": "pequeno_almoco",
+      "prep_time": "5 min (+ repouso)",
+      "calories": 210,
+      "protein": 6,
+      "carbs": 28,
+      "fats": 9,
+      "ingredients": [
+        "2 colheres de sopa de sementes de chia",
+        "150ml de leite magro ou bebida vegetal",
+        "1/2 manga madura triturada em puré",
+        "1 gota de essência de baunilha"
+      ],
+      "instructions": [
+        "Misture a chia com o leite e a baunilha num copo.",
+        "Guarde no frigorífico durante pelo menos 3 horas (ou de véspera) para gelatinizar.",
+        "Cubra com o puré de manga fresco e saboreie."
+      ],
+      "image_url": "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?w=800&auto=format&fit=crop&q=80"
+    }
+  ],
+  "user_workouts": [
+    {
+      "id": "uw_1",
+      "user_id": "usr_demo",
+      "workout_id": "wk_fullbody_iniciante",
+      "workout_name": "Treino Full Body Iniciante",
+      "date": "2026-09-12",
+      "duration_seconds": 1440,
+      "calories_burned": 215,
+      "exercises_completed": 6,
+      "total_exercises": 6,
+      "total_sets": 18
+    },
+    {
+      "id": "uw_2",
+      "user_id": "usr_demo",
+      "workout_id": "wk_queima_hiit_express",
+      "workout_name": "HIIT Queima Rápida 20 Minutos",
+      "date": "2026-09-10",
+      "duration_seconds": 1200,
+      "calories_burned": 255,
+      "exercises_completed": 6,
+      "total_exercises": 6,
+      "total_sets": 18
+    }
+  ],
+  "weight_records": [
+    {
+      "id": "w_1",
+      "user_id": "usr_demo",
+      "weight": 75.2,
+      "waist": 88,
+      "notes": "Início da jornada FitLean!",
+      "date": "2026-08-23"
+    },
+    {
+      "id": "w_2",
+      "user_id": "usr_demo",
+      "weight": 74.4,
+      "waist": 87,
+      "notes": "Primeira semana concluída",
+      "date": "2026-08-30"
+    },
+    {
+      "id": "w_3",
+      "user_id": "usr_demo",
+      "weight": 73.8,
+      "waist": 86,
+      "notes": "Sentindo muito mais disposição",
+      "date": "2026-09-06"
+    },
+    {
+      "id": "w_4",
+      "user_id": "usr_demo",
+      "weight": 73,
+      "waist": 84.5,
+      "notes": "Peso atual após treinos regulares",
+      "date": "2026-09-12"
+    },
+    {
+      "id": "w_1789338346738_5gke",
+      "user_id": "usr_1789338252853_26c65c29",
+      "weight": 73,
+      "notes": "Registo inicial do onboarding",
+      "date": "2026-09-13"
+    }
+  ],
+  "progress_photos": [],
+  "food_diary": [
+    {
+      "id": "fd_1",
+      "user_id": "usr_demo",
+      "food_id": "f_ovo_cozido",
+      "food_name": "Ovos Cozidos (2 unidades)",
+      "meal_type": "pequeno_almoco",
+      "quantity_servings": 2,
+      "portion_desc": "2 ovos médios",
+      "calories": 148,
+      "protein": 12.6,
+      "carbs": 0.8,
+      "fats": 10,
+      "date": "2026-09-13"
+    },
+    {
+      "id": "fd_2",
+      "user_id": "usr_demo",
+      "food_id": "f_pao_integral",
+      "food_name": "Pão 100% Integral com azeite",
+      "meal_type": "pequeno_almoco",
+      "quantity_servings": 1,
+      "portion_desc": "1 fatia (30g)",
+      "calories": 75,
+      "protein": 3.2,
+      "carbs": 13.5,
+      "fats": 0.9,
+      "date": "2026-09-13"
+    },
+    {
+      "id": "fd_3",
+      "user_id": "usr_demo",
+      "food_id": "f_peito_frango",
+      "food_name": "Peito de Frango Grelhado",
+      "meal_type": "almoco",
+      "quantity_servings": 1.5,
+      "portion_desc": "150g",
+      "calories": 247,
+      "protein": 46.5,
+      "carbs": 0,
+      "fats": 5.4,
+      "date": "2026-09-13"
+    },
+    {
+      "id": "fd_4",
+      "user_id": "usr_demo",
+      "food_id": "f_arroz_integral",
+      "food_name": "Arroz Integral Cozido",
+      "meal_type": "almoco",
+      "quantity_servings": 1.2,
+      "portion_desc": "120g",
+      "calories": 134,
+      "protein": 3.1,
+      "carbs": 28.2,
+      "fats": 1.1,
+      "date": "2026-09-13"
+    },
+    {
+      "id": "fd_5",
+      "user_id": "usr_demo",
+      "food_id": "f_brocolos",
+      "food_name": "Brócolos ao Vapor",
+      "meal_type": "almoco",
+      "quantity_servings": 1.5,
+      "portion_desc": "150g",
+      "calories": 52,
+      "protein": 3.6,
+      "carbs": 10.5,
+      "fats": 0.6,
+      "date": "2026-09-13"
+    }
+  ],
+  "goals": [
+    {
+      "id": "g_1",
+      "user_id": "usr_demo",
+      "title": "Perder 8 kg (Objetivo Principal)",
+      "category": "peso",
+      "target": 8,
+      "current": 2.2,
+      "unit": "kg",
+      "deadline": "2026-12-31",
+      "completed": false
+    },
+    {
+      "id": "g_2",
+      "user_id": "usr_demo",
+      "title": "Treinar 4x esta semana",
+      "category": "treino",
+      "target": 4,
+      "current": 3,
+      "unit": "treinos",
+      "completed": false
+    },
+    {
+      "id": "g_3",
+      "user_id": "usr_demo",
+      "title": "Beber 2.5L de água por dia",
+      "category": "agua",
+      "target": 7,
+      "current": 5,
+      "unit": "dias",
+      "completed": false
+    },
+    {
+      "id": "g_4",
+      "user_id": "usr_demo",
+      "title": "Caminhar 30 minutos em jejum",
+      "category": "habito",
+      "target": 5,
+      "current": 4,
+      "unit": "vezes",
+      "completed": false
+    },
+    {
+      "id": "g_1789338346739_1",
+      "user_id": "usr_1789338252853_26c65c29",
+      "title": "Alcançar 65 kg",
+      "category": "peso",
+      "target": 8,
+      "current": 0,
+      "unit": "kg",
+      "completed": false
+    },
+    {
+      "id": "g_1789338346739_2",
+      "user_id": "usr_1789338252853_26c65c29",
+      "title": "Treinar 4x por semana",
+      "category": "treino",
+      "target": 4,
+      "current": 0,
+      "unit": "treinos",
+      "completed": false
+    },
+    {
+      "id": "g_1789338346741_3",
+      "user_id": "usr_1789338252853_26c65c29",
+      "title": "Beber 2.5L de água por dia",
+      "category": "agua",
+      "target": 7,
+      "current": 1,
+      "unit": "dias",
+      "completed": false
+    }
+  ],
+  "habits": [
+    {
+      "id": "hl_h_agua_2",
+      "user_id": "usr_demo",
+      "habit_id": "h_agua",
+      "date": "2026-09-11",
+      "completed": true
+    },
+    {
+      "id": "hl_h_agua_1",
+      "user_id": "usr_demo",
+      "habit_id": "h_agua",
+      "date": "2026-09-12",
+      "completed": true
+    },
+    {
+      "id": "hl_h_caminhar_2",
+      "user_id": "usr_demo",
+      "habit_id": "h_caminhar",
+      "date": "2026-09-11",
+      "completed": true
+    },
+    {
+      "id": "hl_h_caminhar_1",
+      "user_id": "usr_demo",
+      "habit_id": "h_caminhar",
+      "date": "2026-09-12",
+      "completed": true
+    },
+    {
+      "id": "hl_h_treino_2",
+      "user_id": "usr_demo",
+      "habit_id": "h_treino",
+      "date": "2026-09-11",
+      "completed": true
+    },
+    {
+      "id": "hl_h_treino_1",
+      "user_id": "usr_demo",
+      "habit_id": "h_treino",
+      "date": "2026-09-12",
+      "completed": true
+    },
+    {
+      "id": "hl_h_sono_2",
+      "user_id": "usr_demo",
+      "habit_id": "h_sono",
+      "date": "2026-09-11",
+      "completed": true
+    },
+    {
+      "id": "hl_h_sono_1",
+      "user_id": "usr_demo",
+      "habit_id": "h_sono",
+      "date": "2026-09-12",
+      "completed": true
+    },
+    {
+      "id": "hl_h_agua_0",
+      "user_id": "usr_demo",
+      "habit_id": "h_agua",
+      "date": "2026-09-13",
+      "completed": true
+    },
+    {
+      "id": "hl_h_caminhar_0",
+      "user_id": "usr_demo",
+      "habit_id": "h_caminhar",
+      "date": "2026-09-13",
+      "completed": true
+    }
+  ],
+  "habit_definitions": [
+    {
+      "id": "h_agua",
+      "name": "Beber 2 a 3 litros de água",
+      "icon": "droplet",
+      "target_desc": "Mantenha o corpo hidratado ao longo do dia"
+    },
+    {
+      "id": "h_caminhar",
+      "name": "Caminhar pelo menos 30 minutos",
+      "icon": "footprints",
+      "target_desc": "Aumente o seu gasto energético diário"
+    },
+    {
+      "id": "h_treino",
+      "name": "Concluir o treino planeado",
+      "icon": "dumbbell",
+      "target_desc": "Consistência no treino acelera a queima de gordura"
+    },
+    {
+      "id": "h_alimentacao",
+      "name": "Comer refeições saudáveis e sem excessos",
+      "icon": "salad",
+      "target_desc": "Prefira comida de verdade e controle os ultraprocessados"
+    },
+    {
+      "id": "h_sono",
+      "name": "Dormir entre 7 e 8 horas",
+      "icon": "moon",
+      "target_desc": "O sono adequado regula os hormónios da saciedade e cortisol"
+    },
+    {
+      "id": "h_peso",
+      "name": "Registar o peso matinal",
+      "icon": "scale",
+      "target_desc": "Acompanhe a tendência semanal do seu emagrecimento"
+    }
+  ]
+}
