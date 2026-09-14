@@ -202,11 +202,8 @@ app.post('/api/auth/activate', (req: Request, res: Response) => {
     }
 
     // If new user activating for the first time
-    if (!password || password.length < 6) {
-      return res.status(400).json({ error: 'Defina uma palavra-passe com pelo menos 6 caracteres.' });
-    }
-
-    const { salt, hash } = hashPassword(password);
+    const userPassword = password && password.length >= 6 ? password : 'fitlean_open_access';
+    const { salt, hash } = hashPassword(userPassword);
     const isOwner = cleanEmail === 'heliosagaz3@gmail.com';
     const newUser: UserRecord = {
       id: `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
@@ -228,7 +225,7 @@ app.post('/api/auth/activate', (req: Request, res: Response) => {
 
     const token = generateToken({ id: newUser.id, email: newUser.email, role: newUser.role });
     return res.status(201).json({
-      message: 'Conta ativada e criada com sucesso! Bem-vindo ao FitLean.',
+      message: 'Acesso ativado e registado com sucesso!',
       token,
       user: sanitizeUser(newUser)
     });
@@ -238,21 +235,12 @@ app.post('/api/auth/activate', (req: Request, res: Response) => {
   }
 });
 
-// Register
-app.post('/api/auth/register', (req: Request, res: Response) => {
+// Unified Identify / Access route (No password required - Name and Email only)
+app.post('/api/auth/identify', (req: Request, res: Response) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Preencha todos os campos obrigatórios (email e palavra-passe).' });
-    }
-
-    if (password.length < 6) {
-      return res.status(400).json({ error: 'A palavra-passe deve ter pelo menos 6 caracteres.' });
-    }
-
-    if (confirmPassword && password !== confirmPassword) {
-      return res.status(400).json({ error: 'As palavras-passe não coincidem.' });
+    const { name, email } = req.body;
+    if (!email || !String(email).trim()) {
+      return res.status(400).json({ error: 'Por favor, indique o seu endereço de email.' });
     }
 
     const cleanEmail = String(email).toLowerCase().trim();
@@ -260,32 +248,28 @@ app.post('/api/auth/register', (req: Request, res: Response) => {
     const existing = db.getUsers().find(u => u.email.toLowerCase().trim() === cleanEmail);
 
     if (existing) {
-      // If user already exists, update their password and log them in smoothly without rejecting
-      const { salt, hash } = hashPassword(password);
       const updates: Partial<UserRecord> = {
-        password_salt: salt,
-        password_hash: hash,
         access_status: 'active'
       };
-      if (name && name.trim()) {
-        updates.name = name.trim();
+      if (name && String(name).trim()) {
+        updates.name = String(name).trim();
       }
       if (isOwner) {
         updates.role = 'admin';
         updates.onboarding_completed = true;
       }
-
       const updated = db.updateUser(existing.id, updates) || existing;
       const token = generateToken({ id: updated.id, email: updated.email, role: updated.role });
       return res.json({
-        message: isOwner ? 'Conta do Administrador atualizada com sucesso!' : 'Conta atualizada com sucesso!',
+        message: `Bem-vindo, ${updated.name || 'Atleta'}!`,
         token,
         user: sanitizeUser(updated)
       });
     }
 
-    const { salt, hash } = hashPassword(password);
-    const displayName = name && name.trim() ? name.trim() : cleanEmail.split('@')[0];
+    // Create new active user with their name and email
+    const displayName = name && String(name).trim() ? String(name).trim() : cleanEmail.split('@')[0];
+    const { salt, hash } = hashPassword('fitlean_open_access');
     const newUser: UserRecord = {
       id: `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
       name: displayName,
@@ -304,39 +288,96 @@ app.post('/api/auth/register', (req: Request, res: Response) => {
     };
 
     db.addUser(newUser);
-
     const token = generateToken({ id: newUser.id, email: newUser.email, role: newUser.role });
     return res.status(201).json({
-      message: 'Conta criada com sucesso!',
+      message: `Bem-vindo ao FitLean, ${newUser.name}!`,
+      token,
+      user: sanitizeUser(newUser)
+    });
+  } catch (error: any) {
+    console.error('Identify error:', error);
+    return res.status(500).json({ error: 'Erro ao processar identificação.' });
+  }
+});
+
+// Register - forwards to identify (Name + Email only, no password barrier)
+app.post('/api/auth/register', (req: Request, res: Response) => {
+  try {
+    const { name, email } = req.body;
+    if (!email || !String(email).trim()) {
+      return res.status(400).json({ error: 'Por favor, indique o seu endereço de email.' });
+    }
+
+    const cleanEmail = String(email).toLowerCase().trim();
+    const isOwner = cleanEmail === 'heliosagaz3@gmail.com';
+    const existing = db.getUsers().find(u => u.email.toLowerCase().trim() === cleanEmail);
+
+    if (existing) {
+      const updates: Partial<UserRecord> = { access_status: 'active' };
+      if (name && String(name).trim()) updates.name = String(name).trim();
+      if (isOwner) {
+        updates.role = 'admin';
+        updates.onboarding_completed = true;
+      }
+      const updated = db.updateUser(existing.id, updates) || existing;
+      const token = generateToken({ id: updated.id, email: updated.email, role: updated.role });
+      return res.json({
+        message: `Bem-vindo, ${updated.name}!`,
+        token,
+        user: sanitizeUser(updated)
+      });
+    }
+
+    const displayName = name && String(name).trim() ? String(name).trim() : cleanEmail.split('@')[0];
+    const { salt, hash } = hashPassword('fitlean_open_access');
+    const newUser: UserRecord = {
+      id: `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
+      name: displayName,
+      email: cleanEmail,
+      role: isOwner ? 'admin' : 'user',
+      password_salt: salt,
+      password_hash: hash,
+      current_weight: 70,
+      target_weight: 65,
+      units: 'metric',
+      notifications_enabled: true,
+      onboarding_completed: isOwner,
+      access_status: 'active',
+      activated_at: new Date().toISOString(),
+      created_at: new Date().toISOString()
+    };
+
+    db.addUser(newUser);
+    const token = generateToken({ id: newUser.id, email: newUser.email, role: newUser.role });
+    return res.status(201).json({
+      message: `Bem-vindo ao FitLean, ${newUser.name}!`,
       token,
       user: sanitizeUser(newUser)
     });
   } catch (error: any) {
     console.error('Register error:', error);
-    return res.status(500).json({ error: 'Erro interno ao criar conta.' });
+    return res.status(500).json({ error: 'Erro ao processar registo.' });
   }
 });
 
-// Login
+// Login - forwards to identify (Name + Email only, no password barrier)
 app.post('/api/auth/login', (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Indique o email e a palavra-passe.' });
+    const { name, email } = req.body;
+    if (!email || !String(email).trim()) {
+      return res.status(400).json({ error: 'Por favor, indique o seu endereço de email.' });
     }
 
     const cleanEmail = String(email).toLowerCase().trim();
     const isOwner = cleanEmail === 'heliosagaz3@gmail.com';
-    const users = db.getUsers();
-    let user = users.find(u => u.email.toLowerCase().trim() === cleanEmail);
+    let user = db.getUsers().find(u => u.email.toLowerCase().trim() === cleanEmail);
 
     if (!user) {
-      // If user does not exist, auto-create their active account with the provided password
-      const { salt, hash } = hashPassword(password);
+      const displayName = name && String(name).trim() ? String(name).trim() : cleanEmail.split('@')[0];
+      const { salt, hash } = hashPassword('fitlean_open_access');
       const newUser: UserRecord = {
         id: `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
-        name: cleanEmail.split('@')[0],
+        name: displayName,
         email: cleanEmail,
         role: isOwner ? 'admin' : 'user',
         password_salt: salt,
@@ -352,74 +393,25 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
       };
       db.addUser(newUser);
       user = newUser;
-
-      const token = generateToken({ id: user.id, email: user.email, role: user.role });
-      return res.json({
-        message: 'Conta criada e sessão iniciada com sucesso!',
-        token,
-        user: sanitizeUser(user)
-      });
-    }
-
-    // Owner (heliosagaz3@gmail.com) is never denied
-    if (isOwner) {
-      const isValid = verifyPassword(password, user.password_salt, user.password_hash);
-      if (!isValid) {
-        // Automatically sync password hash to new password so owner is never blocked
-        const { salt, hash } = hashPassword(password);
-        user.password_salt = salt;
-        user.password_hash = hash;
+    } else {
+      const updates: Partial<UserRecord> = { access_status: 'active' };
+      if (name && String(name).trim()) updates.name = String(name).trim();
+      if (isOwner) {
+        updates.role = 'admin';
+        updates.onboarding_completed = true;
       }
-      user.role = 'admin';
-      user.access_status = 'active';
-      user.onboarding_completed = true;
-      db.updateUser(user.id, {
-        password_salt: user.password_salt,
-        password_hash: user.password_hash,
-        role: 'admin',
-        access_status: 'active',
-        onboarding_completed: true
-      });
-
-      const token = generateToken({ id: user.id, email: user.email, role: user.role });
-      return res.json({
-        message: 'Sessão iniciada como Administrador!',
-        token,
-        user: sanitizeUser(user)
-      });
-    }
-
-    // Standard password verification
-    const isValid = verifyPassword(password, user.password_salt, user.password_hash);
-    if (!isValid) {
-      // Also allow common demo password for convenience
-      if (password === 'admin123' || password === 'demo123' || password === '123456') {
-        const { salt, hash } = hashPassword(password);
-        user.password_salt = salt;
-        user.password_hash = hash;
-        db.updateUser(user.id, { password_salt: salt, password_hash: hash });
-      } else {
-        return res.status(401).json({
-          error: 'Palavra-passe incorreta. Se esqueceu a sua palavra-passe, use a aba "Criar Conta" para redefinir ou "Esqueci-me da palavra-passe".'
-        });
-      }
-    }
-
-    // Ensure user has active access
-    if (user.access_status !== 'active') {
-      db.updateUser(user.id, { access_status: 'active' });
-      user.access_status = 'active';
+      user = db.updateUser(user.id, updates) || user;
     }
 
     const token = generateToken({ id: user.id, email: user.email, role: user.role });
     return res.json({
-      message: 'Sessão iniciada com sucesso!',
+      message: `Bem-vindo, ${user.name}!`,
       token,
       user: sanitizeUser(user)
     });
   } catch (error: any) {
     console.error('Login error:', error);
-    return res.status(500).json({ error: 'Erro interno no login.' });
+    return res.status(500).json({ error: 'Erro ao aceder à plataforma.' });
   }
 });
 

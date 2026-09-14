@@ -47,49 +47,34 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart, onLogin, onRe
 
           {/* Call to Actions */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-            {/* Primary Button: Entrar / Já tenho acesso */}
+            {/* Primary Button: Aceder à Plataforma */}
             <button
               id="hero-btn-have-access"
               type="button"
               onClick={onLogin}
-              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm sm:text-base transition-all shadow-lg hover:shadow-emerald-600/25 flex items-center justify-center gap-2.5 active:scale-[0.99] cursor-pointer"
+              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm sm:text-base transition-all shadow-lg hover:shadow-emerald-600/25 flex items-center justify-center gap-2.5 active:scale-[0.99] cursor-pointer"
             >
-              <span>Entrar / Aceder</span>
+              <span>Aceder à Plataforma</span>
               <ArrowRight className="w-4 h-4" />
             </button>
 
-            {/* Secondary Button: Criar Conta */}
-            <button
-              id="hero-btn-register"
-              type="button"
-              onClick={onRegister || onLogin}
-              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-stone-900 hover:bg-stone-800 dark:bg-stone-800 dark:hover:bg-stone-700 text-white font-bold text-sm sm:text-base transition-all text-center flex items-center justify-center gap-2 shadow-md hover:scale-[1.01] cursor-pointer"
-            >
-              <span>Criar Conta</span>
-              <Sparkles className="w-4 h-4 text-emerald-400" />
-            </button>
-
-            {/* Commercial CTA Button: Quero transformar meu corpo -> CHECKOUT_URL */}
+            {/* Commercial CTA Button: Comprar Acesso no Checkout Externo */}
             <a
               id="hero-btn-buy"
               href={CHECKOUT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-bold text-sm sm:text-base transition-all text-center flex items-center justify-center gap-2 shadow-xs"
+              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-stone-900 hover:bg-stone-800 dark:bg-stone-800 dark:hover:bg-stone-700 text-white font-bold text-sm sm:text-base transition-all text-center flex items-center justify-center gap-2 shadow-md hover:scale-[1.01]"
             >
-              <span>Adquirir FitLean</span>
-              <ChevronRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <span>Comprar Acesso (Checkout)</span>
+              <ChevronRight className="w-4 h-4 text-emerald-400" />
             </a>
           </div>
 
           <div className="mt-4">
-            <button
-              type="button"
-              onClick={onActivate || onLogin}
-              className="text-xs text-stone-500 dark:text-stone-400 hover:text-emerald-600 dark:hover:text-emerald-400 underline underline-offset-4 cursor-pointer font-medium"
-            >
-              Comprou recentemente na gateway? <strong>Ativar acesso com código</strong>
-            </button>
+            <p className="text-xs text-stone-500 dark:text-stone-400 font-medium">
+              Efetuou o pagamento no checkout externo? Clique em <strong>Aceder à Plataforma</strong> e insira o seu nome e email.
+            </p>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs text-stone-500 dark:text-stone-400 font-medium">

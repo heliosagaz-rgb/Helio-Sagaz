@@ -98,7 +98,17 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
 
 export const api = {
   // Auth
-  async register(body: { name: string; email: string; password: string; confirmPassword?: string }) {
+  async identify(body: { name?: string; email: string }) {
+    const res = await request<{ message: string; token: string; user: User }>('/api/auth/identify', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    authStorage.setToken(res.token);
+    authStorage.setCachedUser(res.user);
+    return res;
+  },
+
+  async register(body: { name?: string; email: string; password?: string; confirmPassword?: string }) {
     const res = await request<{ message: string; token: string; user: User }>('/api/auth/register', {
       method: 'POST',
       body: JSON.stringify(body),
@@ -108,7 +118,7 @@ export const api = {
     return res;
   },
 
-  async login(body: { email: string; password: string }) {
+  async login(body: { email: string; name?: string; password?: string }) {
     const res = await request<{ message: string; token: string; user: User }>('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify(body),

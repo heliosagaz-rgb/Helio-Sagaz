@@ -1,6 +1,7 @@
 import React from 'react';
 import type { User } from '../types.ts';
 import { useTheme } from '../context/ThemeContext.tsx';
+import { CHECKOUT_URL } from '../config.ts';
 import {
   Flame,
   User as UserIcon,
@@ -12,7 +13,8 @@ import {
   Menu,
   Sun,
   Moon,
-  Key
+  Key,
+  ShoppingBag
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -162,15 +164,17 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => onNavigate('login')}
                 className="text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl transition-colors cursor-pointer"
               >
-                Entrar
+                Aceder
               </button>
-              <button
-                type="button"
-                onClick={() => onNavigate('register')}
-                className="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-3.5 py-2 rounded-xl transition-all shadow-md shadow-emerald-600/20 cursor-pointer"
+              <a
+                href={CHECKOUT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-3.5 py-2 rounded-xl transition-all shadow-md shadow-emerald-600/20 flex items-center gap-1.5"
               >
-                Criar Conta
-              </button>
+                <ShoppingBag className="w-3.5 h-3.5" />
+                <span>Comprar Acesso</span>
+              </a>
             </div>
           )}
         </div>
