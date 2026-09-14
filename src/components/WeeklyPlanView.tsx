@@ -47,6 +47,7 @@ export const WeeklyPlanView: React.FC<WeeklyPlanViewProps> = ({
             ? workouts.find((w) => w.id === workoutId)
             : undefined;
           const isRest = dayPlan.is_rest ?? dayPlan.isRest ?? !workout;
+          const effectiveWorkout = workout || (workouts.length > 0 ? workouts[idx % workouts.length] : undefined);
           const dayLabel = dayPlan.day || dayPlan.dayName || dayPlan.dayShort || `Dia ${idx + 1}`;
           const title = dayPlan.title || dayPlan.workoutTitle || (workout ? workout.name : (isRest ? 'Descanso Ativo' : 'Treino do Dia'));
           const dayPart = dayLabel.includes('-') ? dayLabel.split('-')[0] : dayLabel;
@@ -93,9 +94,25 @@ export const WeeklyPlanView: React.FC<WeeklyPlanViewProps> = ({
                 )}
 
                 {isRest && (
-                  <div className="mt-3 py-3 px-3 bg-white/70 dark:bg-stone-800/80 rounded-xl border border-stone-200/50 dark:border-stone-700 flex items-center gap-2 text-xs text-stone-600 dark:text-stone-300">
-                    <Coffee className="w-4 h-4 text-amber-500 flex-shrink-0" />
-                    <span>Recuperação ativa: hidrate-se bem e faça uma caminhada leve.</span>
+                  <div className="mt-3 py-2.5 px-3 bg-white/70 dark:bg-stone-800/80 rounded-xl border border-stone-200/50 dark:border-stone-700 flex flex-col gap-2 text-xs text-stone-600 dark:text-stone-300">
+                    <div className="flex items-center gap-2">
+                      <Coffee className="w-4 h-4 text-amber-500 flex-shrink-0" />
+                      <span>Recuperação ativa (descanso planeado).</span>
+                    </div>
+                    {effectiveWorkout && (
+                      <div className="pt-2 border-t border-stone-200/40 dark:border-stone-700/60 flex items-center justify-between">
+                        <span className="text-[11px] text-stone-500 dark:text-stone-400 truncate max-w-[130px]">
+                          Opcional: {effectiveWorkout.name}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onStartWorkout(effectiveWorkout)}
+                          className="px-2 py-1 bg-emerald-600/10 hover:bg-emerald-600/20 text-emerald-700 dark:text-emerald-300 font-bold rounded-lg text-[10px] transition-colors cursor-pointer"
+                        >
+                          Treinar Hoje
+                        </button>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -105,12 +122,12 @@ export const WeeklyPlanView: React.FC<WeeklyPlanViewProps> = ({
                   <div className="flex items-center gap-2.5 text-[11px] text-stone-500 dark:text-stone-400">
                     <span className="flex items-center gap-1">
                       <Clock className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
-                      <span>{workout.duration_minutes}m</span>
+                      <span>{Number(workout.duration_minutes) || 30}m</span>
                     </span>
                     <span>•</span>
                     <span className="flex items-center gap-1">
                       <Flame className="w-3 h-3 text-amber-500" />
-                      <span>{workout.calories_burned_est} kcal</span>
+                      <span>{Number(workout.calories_burned_est) || 250} kcal</span>
                     </span>
                   </div>
 

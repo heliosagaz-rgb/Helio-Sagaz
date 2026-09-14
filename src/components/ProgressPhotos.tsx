@@ -417,24 +417,31 @@ export const ProgressPhotos: React.FC<ProgressPhotosProps> = ({
             )}
 
             {/* Side-by-side weight comparison */}
-            {beforePhoto?.weight && afterPhoto?.weight && (
-              <div className="flex items-center justify-around bg-stone-800/80 p-3 rounded-2xl text-xs">
-                <div>
-                  <span className="text-stone-400 block">Antes:</span>
-                  <span className="text-sm font-bold text-stone-200">{beforePhoto.weight} kg</span>
+            {(() => {
+              const beforeW = Number(beforePhoto?.weight);
+              const afterW = Number(afterPhoto?.weight);
+              const isValid = !isNaN(beforeW) && !isNaN(afterW) && beforeW > 0 && afterW > 0;
+              if (!isValid) return null;
+              const diff = (afterW - beforeW).toFixed(1);
+              return (
+                <div className="flex items-center justify-around bg-stone-800/80 p-3 rounded-2xl text-xs">
+                  <div>
+                    <span className="text-stone-400 block">Antes:</span>
+                    <span className="text-sm font-bold text-stone-200">{beforeW} kg</span>
+                  </div>
+                  <div className="text-center">
+                    <span className="text-stone-400 block">Diferença:</span>
+                    <span className="text-sm font-bold text-emerald-400">
+                      {diff} kg
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-stone-400 block">Depois:</span>
+                    <span className="text-sm font-bold text-emerald-400">{afterW} kg</span>
+                  </div>
                 </div>
-                <div className="text-center">
-                  <span className="text-stone-400 block">Diferença:</span>
-                  <span className="text-sm font-bold text-emerald-400">
-                    {(afterPhoto.weight - beforePhoto.weight).toFixed(1)} kg
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="text-stone-400 block">Depois:</span>
-                  <span className="text-sm font-bold text-emerald-400">{afterPhoto.weight} kg</span>
-                </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
         </div>
       )}

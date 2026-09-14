@@ -24,12 +24,16 @@ interface WorkoutRunnerProps {
   workout: Workout & { exercises: Exercise[] };
   onClose: () => void;
   onWorkoutCompleted?: () => void;
+  onViewProgress?: () => void;
+  userName?: string;
 }
 
 export const WorkoutRunner: React.FC<WorkoutRunnerProps> = ({
   workout,
   onClose,
   onWorkoutCompleted,
+  onViewProgress,
+  userName = 'Atleta',
 }) => {
   const exercises = workout.exercises && workout.exercises.length > 0 ? workout.exercises : [];
   const [currentExIndex, setCurrentExIndex] = useState(0);
@@ -148,15 +152,16 @@ export const WorkoutRunner: React.FC<WorkoutRunnerProps> = ({
   const handleSaveWorkout = async () => {
     setIsSaving(true);
     try {
-      const estimatedCalories = Math.round(
-        (workout.calories_burned_est / (workout.duration_minutes * 60)) * Math.max(elapsedSeconds, 300)
-      );
+      const durationSecs = Math.max(60, (Number(workout?.duration_minutes) || 30) * 60);
+      const calBase = Number(workout?.calories_burned_est) || 250;
+      const rawEstimated = Math.round((calBase / durationSecs) * Math.max(Number(elapsedSeconds) || 0, 300));
+      const estimatedCalories = isNaN(rawEstimated) || rawEstimated <= 0 ? calBase : rawEstimated;
 
       await api.logCompletedWorkout({
         workout_id: workout.id,
         workout_name: workout.name,
-        duration_seconds: elapsedSeconds,
-        calories_burned: estimatedCalories || workout.calories_burned_est,
+        duration_seconds: Number(elapsedSeconds) || 0,
+        calories_burned: estimatedCalories,
         exercises_completed: exercises.length,
         total_exercises: exercises.length,
         total_sets: completedSetsCount,
@@ -167,8 +172,12 @@ export const WorkoutRunner: React.FC<WorkoutRunnerProps> = ({
         onWorkoutCompleted();
       }
       setTimeout(() => {
-        onClose();
-      }, 1400);
+        if (onViewProgress) {
+          onViewProgress();
+        } else {
+          onClose();
+        }
+      }, 1200);
     } catch (err) {
       console.error('Failed to save workout:', err);
     } finally {
@@ -184,75 +193,85 @@ export const WorkoutRunner: React.FC<WorkoutRunnerProps> = ({
 
   // ---------------- FINISHED SCREEN ----------------
   if (isCompleted) {
-    const estimatedCalories = Math.round(
-      (workout.calories_burned_est / (workout.duration_minutes * 60)) * Math.max(elapsedSeconds, 300)
-    );
+    const elapsedMinutesRaw = Math.round((Number(elapsedSeconds) || 0) / 60);
+    const elapsedMinutes = isNaN(elapsedMinutesRaw) || elapsedMinutesRaw < 1 ? 1 : elapsedMinutesRaw;
 
     return (
       <div className="fixed inset-0 z-50 bg-stone-950 text-white flex flex-col items-center justify-center p-4 overflow-y-auto">
         <div className="w-full max-w-md bg-stone-900 border border-stone-800 rounded-3xl p-6 sm:p-8 text-center shadow-2xl animate-in zoom-in-95 duration-300">
-          <div className="w-20 h-20 mx-auto rounded-3xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mb-6 shadow-inner">
+          <div className="w-20 h-20 mx-auto rounded-3xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mb-5 shadow-inner">
             <Trophy className="w-10 h-10" />
           </div>
 
           <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-            Treino Concluído! 🎉
+            🎉 TREINO CONCLUÍDO!
           </h2>
-          <p className="text-sm text-stone-400 mt-2">
-            Excelente trabalho! Mais um passo firme em direção aos seus objetivos.
+          <p className="text-base font-bold text-emerald-400 mt-2">
+            Excelente trabalho, {userName}!
+          </p>
+          <p className="text-xs text-stone-300 mt-1 italic">
+            "Você acabou de ficar mais perto do seu objetivo."
           </p>
 
           {/* Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 my-6">
-            <div className="bg-stone-800/80 p-3 rounded-2xl border border-stone-700/60">
-              <Clock className="w-4 h-4 text-emerald-400 mx-auto mb-1" />
-              <span className="text-[11px] text-stone-400 block">Duração</span>
-              <span className="text-base font-bold text-white">{formatTime(elapsedSeconds)}</span>
+          <div className="grid grid-cols-2 gap-3 my-6">
+            <div className="bg-stone-800/90 p-3.5 rounded-2xl border border-stone-700/60 text-left">
+              <div className="flex items-center gap-1.5 text-xs text-stone-400 mb-1">
+                <Flame className="w-4 h-4 text-emerald-400" />
+                <span>Status</span>
+              </div>
+              <span className="text-sm font-bold text-white">🔥 Treino concluído</span>
             </div>
 
-            <div className="bg-stone-800/80 p-3 rounded-2xl border border-stone-700/60">
-              <Flame className="w-4 h-4 text-amber-400 mx-auto mb-1" />
-              <span className="text-[11px] text-stone-400 block">Calorias</span>
-              <span className="text-base font-bold text-amber-400">~{estimatedCalories} kcal</span>
+            <div className="bg-stone-800/90 p-3.5 rounded-2xl border border-stone-700/60 text-left">
+              <div className="flex items-center gap-1.5 text-xs text-stone-400 mb-1">
+                <Clock className="w-4 h-4 text-emerald-400" />
+                <span>Tempo total</span>
+              </div>
+              <span className="text-sm font-bold text-white">⏱ {elapsedMinutes} minutos</span>
             </div>
 
-            <div className="bg-stone-800/80 p-3 rounded-2xl border border-stone-700/60">
-              <CheckCircle2 className="w-4 h-4 text-blue-400 mx-auto mb-1" />
-              <span className="text-[11px] text-stone-400 block">Exercícios</span>
-              <span className="text-base font-bold text-white">{exercises.length}</span>
+            <div className="bg-stone-800/90 p-3.5 rounded-2xl border border-stone-700/60 text-left">
+              <div className="flex items-center gap-1.5 text-xs text-stone-400 mb-1">
+                <Dumbbell className="w-4 h-4 text-purple-400" />
+                <span>Exercícios</span>
+              </div>
+              <span className="text-sm font-bold text-white">🏋️ {exercises.length} exercícios</span>
             </div>
 
-            <div className="bg-stone-800/80 p-3 rounded-2xl border border-stone-700/60">
-              <Dumbbell className="w-4 h-4 text-purple-400 mx-auto mb-1" />
-              <span className="text-[11px] text-stone-400 block">Séries</span>
-              <span className="text-base font-bold text-white">{completedSetsCount}</span>
+            <div className="bg-stone-800/90 p-3.5 rounded-2xl border border-stone-700/60 text-left">
+              <div className="flex items-center gap-1.5 text-xs text-stone-400 mb-1">
+                <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                <span>Séries</span>
+              </div>
+              <span className="text-sm font-bold text-white">💪 {completedSetsCount} séries</span>
             </div>
           </div>
 
           {/* Action Buttons */}
           <div className="space-y-3">
             <button
-              id="btn-save-workout"
+              id="btn-see-my-progress"
               type="button"
-              disabled={isSaving || savedSuccess}
+              disabled={isSaving}
               onClick={handleSaveWorkout}
-              className={`w-full py-3.5 px-6 rounded-2xl font-bold text-sm transition-all flex items-center justify-center gap-2 shadow-lg ${
+              className={`w-full py-4 px-6 rounded-2xl font-black text-sm transition-all flex items-center justify-center gap-2 shadow-lg ${
                 savedSuccess
                   ? 'bg-emerald-600 text-white'
                   : 'bg-emerald-500 hover:bg-emerald-400 text-stone-950 hover:shadow-emerald-500/20'
               }`}
             >
               {isSaving ? (
-                <span>A guardar progresso...</span>
+                <span>A guardar...</span>
               ) : savedSuccess ? (
                 <>
                   <CheckCircle2 className="w-5 h-5" />
-                  <span>Guardado com sucesso!</span>
+                  <span>Guardado! A abrir progresso...</span>
                 </>
               ) : (
                 <>
-                  <CheckCircle2 className="w-5 h-5" />
-                  <span>Guardar treino no histórico</span>
+                  <ArrowRight className="w-5 h-5" />
+                  <span>Ver meu progresso</span>
                 </>
               )}
             </button>
@@ -260,9 +279,9 @@ export const WorkoutRunner: React.FC<WorkoutRunnerProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="w-full py-3 px-6 rounded-2xl text-xs font-semibold text-stone-400 hover:text-white transition-colors"
+              className="w-full py-2.5 px-6 rounded-2xl text-xs font-semibold text-stone-400 hover:text-white transition-colors"
             >
-              Fechar sem guardar
+              Fechar
             </button>
           </div>
         </div>

@@ -145,8 +145,11 @@ export const CalorieTracker: React.FC<CalorieTrackerProps> = ({
     }
   };
 
-  const remainingCalories = Math.max(calorieTarget - totals.calories, 0);
-  const percentage = Math.min(Math.round((totals.calories / calorieTarget) * 100), 100);
+  const targetCals = Number(calorieTarget) > 0 ? Number(calorieTarget) : 2000;
+  const totalCals = Number(totals?.calories) || 0;
+  const remainingCalories = Math.max(targetCals - totalCals, 0);
+  const rawPercentage = Math.round((totalCals / targetCals) * 100);
+  const percentage = isNaN(rawPercentage) ? 0 : Math.min(Math.max(0, rawPercentage), 100);
 
   const mealCategories = [
     { key: 'pequeno_almoco', label: 'Pequeno-almoço', icon: '☀️' },
@@ -156,11 +159,11 @@ export const CalorieTracker: React.FC<CalorieTrackerProps> = ({
   ] as const;
 
   return (
-    <div className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/80 dark:border-stone-800 p-5 sm:p-7 shadow-xs space-y-6 transition-colors">
+    <div className="ios-glass-card rounded-3xl border border-white/60 dark:border-white/10 p-5 sm:p-7 shadow-lg space-y-6 transition-colors">
       {/* Header with Date Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-100 dark:border-stone-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-stone-200/50 dark:border-white/10">
         <div className="flex items-center gap-2">
-          <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 flex items-center justify-center border border-emerald-200/60 dark:border-emerald-800">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 flex items-center justify-center border border-emerald-500/30">
             <Utensils className="w-5 h-5" />
           </div>
           <div>
@@ -176,27 +179,27 @@ export const CalorieTracker: React.FC<CalorieTrackerProps> = ({
             type="date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 border border-transparent dark:border-stone-700 text-xs font-semibold text-stone-700 dark:text-stone-300 focus:outline-emerald-600"
+            className="px-3 py-1.5 rounded-xl ios-glass-subtle border border-white/50 dark:border-white/10 text-xs font-semibold text-stone-700 dark:text-stone-300 focus:outline-emerald-600"
           />
         </div>
       </div>
 
       {/* Main Calorie Summary Card */}
-      <div className="bg-stone-900 dark:bg-stone-800/90 text-white rounded-2xl p-5 sm:p-6 shadow-md space-y-4 border border-stone-800 dark:border-stone-700/60">
+      <div className="ios-glass-card rounded-2xl p-5 sm:p-6 shadow-md space-y-4 border border-white/60 dark:border-white/10">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider block">
+            <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">
               Balanço Energético de Hoje
             </span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-3xl sm:text-4xl font-black">{totals.calories}</span>
-              <span className="text-stone-400 text-sm">/ {calorieTarget} kcal</span>
+              <span className="text-3xl sm:text-4xl font-black text-stone-900 dark:text-white">{totals.calories}</span>
+              <span className="text-stone-500 dark:text-stone-400 text-sm">/ {calorieTarget} kcal</span>
             </div>
           </div>
 
           <div className="sm:text-right">
-            <span className="text-xs text-stone-400 block">Restante para a meta</span>
-            <span className="text-xl sm:text-2xl font-bold text-emerald-400">
+            <span className="text-xs text-stone-500 dark:text-stone-400 block">Restante para a meta</span>
+            <span className="text-xl sm:text-2xl font-bold text-emerald-600 dark:text-emerald-400">
               {remainingCalories} kcal
             </span>
           </div>
@@ -204,7 +207,7 @@ export const CalorieTracker: React.FC<CalorieTrackerProps> = ({
 
         {/* Visual Progress Bar */}
         <div className="space-y-1">
-          <div className="w-full bg-stone-800 dark:bg-stone-700/80 h-3 rounded-full overflow-hidden">
+          <div className="w-full bg-stone-200/80 dark:bg-stone-800/80 h-3 rounded-full overflow-hidden">
             <div
               className={`h-full rounded-full transition-all duration-500 ${
                 totals.calories > calorieTarget ? 'bg-amber-500' : 'bg-emerald-500'
@@ -212,25 +215,25 @@ export const CalorieTracker: React.FC<CalorieTrackerProps> = ({
               style={{ width: `${percentage}%` }}
             />
           </div>
-          <div className="flex justify-between text-[11px] text-stone-400 font-medium">
+          <div className="flex justify-between text-[11px] text-stone-500 dark:text-stone-400 font-medium">
             <span>{percentage}% da meta consumida</span>
             <span>Meta: {calorieTarget} kcal</span>
           </div>
         </div>
 
         {/* Macronutrients Breakdown */}
-        <div className="grid grid-cols-3 gap-3 pt-3 border-t border-stone-800 dark:border-stone-700">
-          <div className="bg-stone-800/80 dark:bg-stone-700/60 p-2.5 rounded-xl text-center">
-            <span className="text-[11px] text-stone-400 block">Proteína</span>
-            <span className="text-sm font-bold text-emerald-400">{totals.protein}g</span>
+        <div className="grid grid-cols-3 gap-3 pt-3 border-t border-stone-200/50 dark:border-white/10">
+          <div className="ios-glass-subtle p-2.5 rounded-xl text-center border border-white/40 dark:border-white/10">
+            <span className="text-[11px] text-stone-500 dark:text-stone-400 block">Proteína</span>
+            <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{totals.protein}g</span>
           </div>
-          <div className="bg-stone-800/80 dark:bg-stone-700/60 p-2.5 rounded-xl text-center">
-            <span className="text-[11px] text-stone-400 block">Carboidratos</span>
-            <span className="text-sm font-bold text-amber-400">{totals.carbs}g</span>
+          <div className="ios-glass-subtle p-2.5 rounded-xl text-center border border-white/40 dark:border-white/10">
+            <span className="text-[11px] text-stone-500 dark:text-stone-400 block">Carboidratos</span>
+            <span className="text-sm font-bold text-amber-600 dark:text-amber-400">{totals.carbs}g</span>
           </div>
-          <div className="bg-stone-800/80 dark:bg-stone-700/60 p-2.5 rounded-xl text-center">
-            <span className="text-[11px] text-stone-400 block">Gorduras</span>
-            <span className="text-sm font-bold text-blue-400">{totals.fats}g</span>
+          <div className="ios-glass-subtle p-2.5 rounded-xl text-center border border-white/40 dark:border-white/10">
+            <span className="text-[11px] text-stone-500 dark:text-stone-400 block">Gorduras</span>
+            <span className="text-sm font-bold text-teal-600 dark:text-teal-400">{totals.fats}g</span>
           </div>
         </div>
       </div>
@@ -244,10 +247,10 @@ export const CalorieTracker: React.FC<CalorieTrackerProps> = ({
           return (
             <div
               key={meal.key}
-              className="border border-stone-200/80 dark:border-stone-800 rounded-2xl overflow-hidden hover:border-stone-300 dark:hover:border-stone-700 transition-colors"
+              className="ios-glass-subtle border border-white/50 dark:border-white/10 rounded-2xl overflow-hidden hover:border-emerald-500/30 transition-colors"
             >
               {/* Meal header */}
-              <div className="bg-stone-50/80 dark:bg-stone-800/60 px-4 py-3 flex items-center justify-between">
+              <div className="bg-white/30 dark:bg-white/5 px-4 py-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="text-base">{meal.icon}</span>
                   <span className="text-sm font-bold text-stone-800 dark:text-stone-200">{meal.label}</span>
@@ -416,7 +419,7 @@ export const CalorieTracker: React.FC<CalorieTrackerProps> = ({
                         </div>
                       </div>
                       <div className="text-xs text-emerald-800 dark:text-emerald-300 font-semibold text-right">
-                        Total calculado: {Math.round(selectedFood.calories * servings)} kcal
+                        Total calculado: {Math.round((Number(selectedFood.calories) || 0) * (Number(servings) || 1))} kcal
                       </div>
                     </div>
                   )}

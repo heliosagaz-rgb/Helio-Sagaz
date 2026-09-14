@@ -53,9 +53,17 @@ export const WeightChart: React.FC<WeightChartProps> = ({
     return sorted.filter((r) => new Date(r.date).getTime() >= cutoff);
   }, [records, timeRange]);
 
-  const latestWeight = records.length > 0 ? records[records.length - 1].weight : undefined;
-  const initialWeight = records.length > 0 ? records[0].weight : undefined;
-  const totalChange = latestWeight !== undefined && initialWeight !== undefined ? latestWeight - initialWeight : 0;
+  const latestWeightRaw = records.length > 0 ? Number(records[records.length - 1].weight) : undefined;
+  const latestWeight = latestWeightRaw !== undefined && !isNaN(latestWeightRaw) ? latestWeightRaw : undefined;
+
+  const initialWeightRaw = records.length > 0 ? Number(records[0].weight) : undefined;
+  const initialWeight = initialWeightRaw !== undefined && !isNaN(initialWeightRaw) ? initialWeightRaw : undefined;
+
+  const totalChangeRaw = latestWeight !== undefined && initialWeight !== undefined ? latestWeight - initialWeight : 0;
+  const totalChange = isNaN(totalChangeRaw) ? 0 : totalChangeRaw;
+
+  const targetWeightNum = Number(targetWeight);
+  const validTargetWeight = !isNaN(targetWeightNum) && targetWeightNum > 0 ? targetWeightNum : null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -84,12 +92,12 @@ export const WeightChart: React.FC<WeightChartProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/80 dark:border-stone-800 p-5 sm:p-7 shadow-xs transition-colors">
+    <div className="ios-glass-card rounded-3xl border border-white/60 dark:border-white/10 p-5 sm:p-7 shadow-lg transition-colors">
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-100 dark:border-stone-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-stone-200/50 dark:border-white/10">
         <div>
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/70 text-emerald-700 dark:text-emerald-300 flex items-center justify-center border border-emerald-200/60 dark:border-emerald-800">
+            <div className="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 flex items-center justify-center border border-emerald-500/30">
               <Scale className="w-5 h-5" />
             </div>
             <div>
@@ -101,15 +109,15 @@ export const WeightChart: React.FC<WeightChartProps> = ({
 
         <div className="flex items-center gap-2 flex-wrap">
           {/* Time Range Selector */}
-          <div className="flex bg-stone-100 dark:bg-stone-800 p-1 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-400">
+          <div className="flex ios-glass-subtle p-1 rounded-xl text-xs font-semibold text-stone-600 dark:text-stone-400 border border-white/50 dark:border-white/10">
             {(['7d', '30d', '3m', 'all'] as const).map((r) => (
               <button
                 key={r}
                 type="button"
                 onClick={() => setTimeRange(r)}
-                className={`px-3 py-1 rounded-lg transition-all ${
+                className={`px-3 py-1 rounded-lg transition-all cursor-pointer ${
                   timeRange === r
-                    ? 'bg-white dark:bg-stone-700 text-emerald-800 dark:text-emerald-300 shadow-xs'
+                    ? 'ios-glass-pill text-emerald-800 dark:text-emerald-300 shadow-xs border-emerald-500/30'
                     : 'hover:text-stone-900 dark:hover:text-stone-200'
                 }`}
               >
@@ -122,7 +130,7 @@ export const WeightChart: React.FC<WeightChartProps> = ({
             id="btn-open-add-weight"
             type="button"
             onClick={() => setShowAddForm(!showAddForm)}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors shadow-xs"
+            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-md shadow-emerald-600/20 cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Registar Peso</span>
@@ -132,7 +140,7 @@ export const WeightChart: React.FC<WeightChartProps> = ({
 
       {/* Add Weight Form */}
       {showAddForm && (
-        <form onSubmit={handleSubmit} className="my-5 p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/60 border border-stone-200/90 dark:border-stone-700 space-y-3">
+        <form onSubmit={handleSubmit} className="my-5 p-4 rounded-2xl ios-glass-subtle border border-white/60 dark:border-white/10 space-y-3">
           <h4 className="text-xs font-bold text-stone-800 dark:text-stone-200 uppercase tracking-wide">Novo Registo de Peso</h4>
           
           {errorMsg && (
@@ -233,7 +241,7 @@ export const WeightChart: React.FC<WeightChartProps> = ({
         <div className="bg-stone-50 dark:bg-stone-800/60 p-3.5 rounded-2xl border border-stone-200/60 dark:border-stone-700/80">
           <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400 block">Peso Objetivo</span>
           <span className="text-xl font-bold text-emerald-700 dark:text-emerald-400 mt-0.5 block">
-            {targetWeight ? `${targetWeight} ${unitLabel}` : '--'}
+            {validTargetWeight ? `${validTargetWeight} ${unitLabel}` : '--'}
           </span>
         </div>
 

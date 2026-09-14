@@ -29,7 +29,22 @@ export interface User {
   units?: 'metric' | 'imperial';
   notifications_enabled?: boolean;
   onboarding_completed?: boolean;
+  access_status?: 'active' | 'inactive' | 'expired' | 'pending_activation';
+  activated_at?: string;
+  subscription_end?: string;
   created_at: string;
+}
+
+export interface Achievement {
+  id: string;
+  title: string;
+  description: string;
+  icon: string;
+  category: 'workout' | 'streak' | 'weight' | 'goal';
+  unlocked: boolean;
+  unlocked_at?: string;
+  progress?: number;
+  max_progress?: number;
 }
 
 export interface Exercise {
@@ -206,3 +221,53 @@ export interface AdminStats {
   totalFoods?: number;
   totalRecipes?: number;
 }
+
+export interface EnrichedOwnerUser extends User {
+  workoutsCount?: number;
+  weightLogsCount?: number;
+  habitsCompletedCount?: number;
+  lastWorkoutDate?: string | null;
+}
+
+export interface OwnerTelemetrySummary {
+  totalUsers: number;
+  activeUsers: number;
+  pendingUsers: number;
+  blockedUsers: number;
+  onboardedUsers: number;
+  newUsers24h: number;
+  newUsers7d: number;
+  newUsers30d: number;
+  completedWorkouts: number;
+  totalCaloriesBurned: number;
+  completedHabitsCount: number;
+  totalWeightLogs: number;
+  totalMealsLogged: number;
+}
+
+export interface OwnerDailySignup {
+  date: string;
+  label: string;
+  signups: number;
+}
+
+export interface OwnerRecentWorkout {
+  id: string;
+  user_id: string;
+  userName: string;
+  workout_name: string;
+  duration_seconds: number;
+  calories_burned: number;
+  date: string;
+}
+
+export interface OwnerTelemetryData {
+  success: boolean;
+  masterKey: string;
+  serverTime: string;
+  summary: OwnerTelemetrySummary;
+  dailySignups: OwnerDailySignup[];
+  recentWorkouts: OwnerRecentWorkout[];
+  users: EnrichedOwnerUser[];
+}
+

@@ -6,12 +6,14 @@ import { Flame, Clock, Dumbbell, ChevronRight, X, CheckCircle2, AlertCircle } fr
 interface ExerciseCardProps {
   exercise: Exercise;
   onSelect?: (exercise: Exercise) => void;
+  onStart?: (exercise: Exercise) => void;
   compact?: boolean;
 }
 
 export const ExerciseCard: React.FC<ExerciseCardProps> = ({
   exercise,
   onSelect,
+  onStart,
   compact = false,
 }) => {
   const [showModal, setShowModal] = useState(false);
@@ -38,7 +40,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
     <>
       <div
         id={`exercise-card-${exercise.id}`}
-        className="bg-white dark:bg-stone-900 rounded-2xl border border-stone-200/80 dark:border-stone-800 shadow-xs hover:shadow-md transition-all flex flex-col overflow-hidden group"
+        className="ios-glass-card rounded-2xl border border-white/60 dark:border-white/10 shadow-md hover:shadow-xl transition-all flex flex-col overflow-hidden group"
       >
         {/* Visual Header */}
         <div className="relative">
@@ -54,6 +56,12 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
         {/* Content */}
         <div className="p-4 flex-1 flex flex-col justify-between">
           <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">
+                {exercise.muscle_group}
+              </span>
+            </div>
+
             <h3 className="text-base font-bold text-stone-900 dark:text-stone-100 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
               {exercise.name}
             </h3>
@@ -62,15 +70,13 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             </p>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-stone-100 dark:border-stone-800 flex items-center justify-between">
-            <div className="flex items-center gap-3 text-xs text-stone-600 dark:text-stone-400">
-              <span className="flex items-center gap-1">
-                <Dumbbell className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-                <span className="capitalize">{exercise.equipment === 'nenhum' ? 'Sem pesos' : exercise.equipment}</span>
-              </span>
-              <span className="flex items-center gap-1">
-                <Flame className="w-3.5 h-3.5 text-amber-500" />
-                <span>~{exercise.calories_per_min || 8} kcal/min</span>
+          <div className="mt-4 pt-3 border-t border-stone-200/50 dark:border-white/10 flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs font-semibold text-stone-700 dark:text-stone-300">
+              <span>{exercise.sets} × {exercise.reps}</span>
+              <span className="text-stone-300 dark:text-stone-600">•</span>
+              <span className="flex items-center gap-0.5 text-stone-500 dark:text-stone-400">
+                <Clock className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span>{exercise.rest_seconds}s</span>
               </span>
             </div>
 
@@ -81,9 +87,9 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 if (onSelect) onSelect(exercise);
                 setShowModal(true);
               }}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 bg-emerald-50 dark:bg-emerald-950/70 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 px-2.5 py-1.5 rounded-lg border border-emerald-200/50 dark:border-emerald-800 transition-colors"
+              className="inline-flex items-center gap-1 text-xs font-bold text-emerald-700 dark:text-emerald-300 hover:text-emerald-800 dark:hover:text-white ios-glass-pill px-3 py-1.5 rounded-xl border border-emerald-500/30 transition-all cursor-pointer"
             >
-              <span>Ver detalhes</span>
+              <span>Ver exercício</span>
               <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
@@ -92,15 +98,15 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
       {/* Exercise Detail Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto">
-          <div className="bg-white dark:bg-stone-900 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-stone-200 dark:border-stone-800 animate-in fade-in zoom-in-95 duration-200 my-8">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-md overflow-y-auto">
+          <div className="ios-glass rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-white/60 dark:border-white/10 animate-in fade-in zoom-in-95 duration-200 my-8">
             {/* Modal Header */}
             <div className="relative">
               <ExerciseVisualPlayer exercise={exercise} showControls={true} />
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="absolute top-3 right-3 z-20 bg-black/50 hover:bg-black/80 text-white p-1.5 rounded-full backdrop-blur-md transition-colors"
+                className="absolute top-3 right-3 z-20 bg-black/50 hover:bg-black/80 text-white p-1.5 rounded-full backdrop-blur-md transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -122,7 +128,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
               </div>
 
               {/* Protocol Specs */}
-              <div className="grid grid-cols-3 gap-3 bg-stone-50 dark:bg-stone-800/60 p-3.5 rounded-xl border border-stone-200/70 dark:border-stone-700 text-center">
+              <div className="grid grid-cols-3 gap-3 ios-glass-subtle p-3.5 rounded-2xl border border-white/50 dark:border-white/10 text-center">
                 <div>
                   <span className="text-[11px] font-medium text-stone-500 dark:text-stone-400 block uppercase">Séries</span>
                   <span className="text-lg font-bold text-emerald-700 dark:text-emerald-400">{exercise.sets}</span>
@@ -146,7 +152,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
                 <ol className="space-y-2">
                   {exercise.instructions.map((step, idx) => (
                     <li key={idx} className="text-xs sm:text-sm text-stone-700 dark:text-stone-300 flex gap-2.5 leading-relaxed">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-800 dark:text-emerald-300 text-[11px] font-bold flex items-center justify-center mt-0.5 border border-emerald-300/40 dark:border-emerald-800">
+                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 text-[11px] font-bold flex items-center justify-center mt-0.5 border border-emerald-500/30">
                         {idx + 1}
                       </span>
                       <span>{step}</span>
@@ -157,7 +163,7 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
 
               {/* Tips & Posture */}
               {exercise.tips && exercise.tips.length > 0 && (
-                <div className="bg-amber-50/70 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-900/60 rounded-xl p-3.5">
+                <div className="ios-glass-subtle border border-amber-500/30 rounded-2xl p-3.5">
                   <h4 className="text-xs font-bold text-amber-900 dark:text-amber-300 mb-1.5 flex items-center gap-1.5">
                     <AlertCircle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                     Dicas de postura e segurança:
@@ -174,13 +180,28 @@ export const ExerciseCard: React.FC<ExerciseCardProps> = ({
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 bg-stone-50 dark:bg-stone-850 dark:bg-stone-800/80 border-t border-stone-200 dark:border-stone-800 flex justify-end">
+            <div className="p-4 ios-glass-subtle border-t border-white/50 dark:border-white/10 flex items-center justify-between gap-3">
               <button
                 type="button"
                 onClick={() => setShowModal(false)}
-                className="px-5 py-2 rounded-xl bg-stone-900 dark:bg-stone-100 hover:bg-stone-800 dark:hover:bg-white text-white dark:text-stone-900 text-xs font-semibold transition-colors"
+                className="px-4 py-2 rounded-xl text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 text-xs font-semibold transition-colors cursor-pointer"
               >
                 Fechar
+              </button>
+
+              <button
+                id={`btn-start-exercise-${exercise.id}`}
+                type="button"
+                onClick={() => {
+                  setShowModal(false);
+                  if (onStart) {
+                    onStart(exercise);
+                  }
+                }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs"
+              >
+                <Dumbbell className="w-3.5 h-3.5" />
+                <span>Começar exercício</span>
               </button>
             </div>
           </div>

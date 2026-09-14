@@ -47,8 +47,22 @@ export const WorkoutsView: React.FC<WorkoutsViewProps> = ({ onStartWorkout }) =>
       ]);
       setWorkouts(wRes);
       setExercises(eRes);
-      if (planRes?.schedule) {
+      if (planRes?.schedule && planRes.schedule.length > 0) {
         setSchedule(planRes.schedule);
+      } else if (wRes && wRes.length > 0) {
+        // Safe fallback schedule for mobile so there is never an empty view
+        const days = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'];
+        const fallbackSchedule: DayPlan[] = days.map((day, idx) => {
+          const wk = wRes[idx % wRes.length];
+          const isRest = idx === 6; // Sunday rest
+          return {
+            day,
+            workout_id: isRest ? undefined : wk.id,
+            is_rest: isRest,
+            title: isRest ? 'Descanso Ativo' : wk.name,
+          };
+        });
+        setSchedule(fallbackSchedule);
       }
     } catch (err) {
       console.error('Failed to load workouts data:', err);
@@ -99,44 +113,44 @@ export const WorkoutsView: React.FC<WorkoutsViewProps> = ({ onStartWorkout }) =>
   return (
     <div className="space-y-6 pb-12">
       {/* Top Navigation Tabs */}
-      <div className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/80 dark:border-stone-800 p-2 sm:p-2.5 flex items-center gap-2 shadow-xs transition-colors">
+      <div className="bg-white dark:bg-stone-900 rounded-3xl border border-stone-200/80 dark:border-stone-800 p-1.5 sm:p-2.5 flex items-center gap-1.5 sm:gap-2 shadow-xs transition-colors overflow-x-auto no-scrollbar scrollbar-none">
         <button
           type="button"
           onClick={() => setActiveTab('semanal')}
-          className={`flex-1 py-2.5 px-4 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`shrink-0 flex-1 min-w-[130px] py-2.5 px-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
             activeTab === 'semanal'
               ? 'bg-emerald-600 text-white shadow-xs'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800'
           }`}
         >
-          <Calendar className="w-4 h-4" />
+          <Calendar className="w-4 h-4 shrink-0" />
           <span>Plano Semanal</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('programas')}
-          className={`flex-1 py-2.5 px-4 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`shrink-0 flex-1 min-w-[150px] py-2.5 px-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
             activeTab === 'programas'
               ? 'bg-emerald-600 text-white shadow-xs'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800'
           }`}
         >
-          <Dumbbell className="w-4 h-4" />
-          <span>Programas de Treino ({workouts.length})</span>
+          <Dumbbell className="w-4 h-4 shrink-0" />
+          <span>Programas ({workouts.length})</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('exercicios')}
-          className={`flex-1 py-2.5 px-4 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 ${
+          className={`shrink-0 flex-1 min-w-[150px] py-2.5 px-3.5 rounded-2xl text-xs font-bold transition-all flex items-center justify-center gap-2 whitespace-nowrap cursor-pointer ${
             activeTab === 'exercicios'
               ? 'bg-emerald-600 text-white shadow-xs'
               : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200 hover:bg-stone-50 dark:hover:bg-stone-800'
           }`}
         >
-          <Layers className="w-4 h-4" />
-          <span>Biblioteca de Exercícios ({exercises.length})</span>
+          <Layers className="w-4 h-4 shrink-0" />
+          <span>Exercícios ({exercises.length})</span>
         </button>
       </div>
 

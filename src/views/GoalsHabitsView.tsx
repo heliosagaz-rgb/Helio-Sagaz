@@ -127,7 +127,11 @@ export const GoalsHabitsView: React.FC = () => {
         {/* Goals List */}
         <div className="space-y-3">
           {goals.map((g) => {
-            const progressPct = Math.min(100, Math.round((g.current / g.target) * 100));
+            const currentNum = Number(g.current) || 0;
+            const targetNum = Number(g.target);
+            const validTarget = !isNaN(targetNum) && targetNum > 0 ? targetNum : 1;
+            const rawPct = Math.round((currentNum / validTarget) * 100);
+            const progressPct = isNaN(rawPct) ? 0 : Math.min(100, Math.max(0, rawPct));
 
             return (
               <div

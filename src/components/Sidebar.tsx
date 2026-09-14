@@ -10,7 +10,8 @@ import {
   Shield,
   X,
   Flame,
-  ChevronRight
+  ChevronRight,
+  Key
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -37,6 +38,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
     { key: 'profile', label: 'Perfil', icon: UserIcon },
   ];
 
+  if (user?.role === 'admin' || user?.email.toLowerCase() === 'heliosagaz3@gmail.com') {
+    navItems.push({ key: 'owner-tracking', label: 'Painel Proprietário', icon: Key });
+  }
+
   if (user?.role === 'admin') {
     navItems.push({ key: 'admin', label: 'Admin', icon: Shield });
   }
@@ -49,8 +54,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   return (
     <>
       {/* Desktop Sidebar (hidden on mobile) */}
-      <aside className="hidden lg:flex flex-col w-64 bg-white dark:bg-stone-900 border-r border-stone-200/80 dark:border-stone-800 min-h-[calc(100vh-61px)] p-4 flex-shrink-0 transition-colors duration-200">
-        <div className="space-y-1">
+      <aside className="hidden lg:flex flex-col w-64 ios-glass rounded-3xl border border-white/60 dark:border-white/10 min-h-[calc(100vh-100px)] p-3.5 flex-shrink-0 transition-all duration-300 shadow-xl shadow-black/5 dark:shadow-black/20 sticky top-20 self-start">
+        <div className="space-y-1.5">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeView === item.key;
@@ -60,17 +65,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 id={`sidebar-nav-${item.key}`}
                 type="button"
                 onClick={() => handleItemClick(item.key)}
-                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all ${
+                className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-emerald-50 dark:bg-emerald-950/70 text-emerald-800 dark:text-emerald-300 shadow-xs border border-emerald-100/80 dark:border-emerald-800/60'
-                    : 'text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/70 hover:text-stone-900 dark:hover:text-stone-100'
+                    ? 'ios-glass-pill text-emerald-800 dark:text-emerald-300 border-emerald-500/35 dark:border-emerald-500/30 shadow-sm'
+                    : 'text-stone-600 dark:text-stone-400 hover:bg-white/40 dark:hover:bg-white/5 hover:text-stone-900 dark:hover:text-stone-100'
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <Icon className={`w-4 h-4 ${isActive ? 'text-emerald-600 dark:text-emerald-400' : 'text-stone-400 dark:text-stone-500'}`} />
                   <span>{item.label}</span>
                 </div>
-                {isActive && <div className="w-1.5 h-4 bg-emerald-600 dark:bg-emerald-400 rounded-full" />}
+                {isActive && <div className="w-1.5 h-4 bg-emerald-500 rounded-full shadow-xs shadow-emerald-500/50" />}
               </button>
             );
           })}
@@ -78,14 +83,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
 
         {/* Motivational Sidebar Card */}
         <div className="mt-auto pt-6">
-          <div className="p-4 rounded-2xl bg-gradient-to-br from-stone-900 to-stone-950 dark:from-stone-800 dark:to-stone-900 text-white shadow-md relative overflow-hidden border border-stone-800 dark:border-stone-700/60">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-6 h-6 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                <Flame className="w-3.5 h-3.5" />
+          <div className="p-4 rounded-2xl ios-glass-subtle text-stone-900 dark:text-white shadow-xs relative overflow-hidden border border-white/40 dark:border-white/10">
+            <div className="flex items-center gap-2 mb-1.5">
+              <div className="w-6 h-6 rounded-xl bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                <Flame className="w-3.5 h-3.5 fill-emerald-500/30" />
               </div>
-              <span className="text-xs font-bold text-emerald-400">Consistência diária</span>
+              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">Consistência diária</span>
             </div>
-            <p className="text-[11px] text-stone-300 dark:text-stone-300 leading-relaxed">
+            <p className="text-[11px] text-stone-600 dark:text-stone-300 leading-relaxed font-medium">
               Pequenos hábitos diários geram transformações definitivas no corpo e na mente.
             </p>
           </div>
@@ -98,11 +103,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
           {/* Backdrop */}
           <div
             onClick={onCloseMobileMenu}
-            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
           />
 
           {/* Drawer Content */}
-          <div className="relative w-4/5 max-w-xs bg-white dark:bg-stone-900 h-full shadow-2xl p-5 flex flex-col z-10 animate-in slide-in-from-left duration-200 border-r border-stone-200/80 dark:border-stone-800">
+          <div className="relative w-4/5 max-w-xs ios-glass h-full shadow-2xl p-5 flex flex-col z-10 animate-in slide-in-from-left duration-200 border-r border-white/60 dark:border-white/10">
             <div className="flex items-center justify-between pb-4 border-b border-stone-100 dark:border-stone-800">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center">

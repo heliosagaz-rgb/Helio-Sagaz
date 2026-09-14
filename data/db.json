@@ -49,7 +49,7 @@
     {
       "id": "usr_1789338252853_26c65c29",
       "email": "heliosagaz3@gmail.com",
-      "role": "user",
+      "role": "admin",
       "password_salt": "be0eff8dfda948e29ed33f4c04006998",
       "password_hash": "305b9c4e40939281b5048534884392fc56bc397ecc08ab0286d784e25d29b2c75866ab21e02ca012f79f626a5fd4b291c6e6b9867093721238b2dc89bae72031",
       "current_weight": 73,
@@ -67,7 +67,8 @@
       "equipment": "nenhum",
       "training_days": 4,
       "time_available": 30,
-      "name": "Heliosagaz3"
+      "name": "Heliosagaz3",
+      "access_status": "active"
     }
   ],
   "exercises": [

@@ -54,9 +54,13 @@ export const OnboardingView: React.FC<OnboardingViewProps> = ({ user, onComplete
   const [generatedPlan, setGeneratedPlan] = useState<any | null>(null);
 
   const calculateTargetTimeWeeks = () => {
-    const diff = Math.max(0, parseFloat(currentWeight) - parseFloat(targetWeight));
+    const current = parseFloat(currentWeight);
+    const target = parseFloat(targetWeight);
+    if (isNaN(current) || isNaN(target)) return 8;
+    const diff = Math.max(0, current - target);
     // Safe healthy rate: 0.5kg to 0.7kg per week
-    return Math.max(2, Math.round(diff / 0.6));
+    const weeks = Math.round(diff / 0.6);
+    return isNaN(weeks) || weeks < 2 ? 2 : weeks;
   };
 
   const handleNext = () => {
@@ -375,8 +379,8 @@ export const OnboardingView: React.FC<OnboardingViewProps> = ({ user, onComplete
                 <label className="text-xs font-bold text-stone-800 dark:text-stone-200 block mb-2">
                   Quantos dias por semana quer treinar?
                 </label>
-                <div className="grid grid-cols-4 gap-2">
-                  {[2, 3, 4, 5].map((d) => (
+                <div className="grid grid-cols-5 gap-2">
+                  {[2, 3, 4, 5, 6].map((d) => (
                     <button
                       key={d}
                       type="button"
@@ -387,7 +391,7 @@ export const OnboardingView: React.FC<OnboardingViewProps> = ({ user, onComplete
                           : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-700'
                       }`}
                     >
-                      {d} dias/sem
+                      {d} dias
                     </button>
                   ))}
                 </div>
@@ -409,7 +413,7 @@ export const OnboardingView: React.FC<OnboardingViewProps> = ({ user, onComplete
                           : 'bg-white dark:bg-stone-800 text-stone-700 dark:text-stone-300 border-stone-200 dark:border-stone-700 hover:bg-stone-50 dark:hover:bg-stone-700'
                       }`}
                     >
-                      {t} min
+                      {t === 60 ? '60+ min' : `${t} min`}
                     </button>
                   ))}
                 </div>
@@ -460,7 +464,7 @@ export const OnboardingView: React.FC<OnboardingViewProps> = ({ user, onComplete
               ) : step === totalSteps ? (
                 <>
                   <Sparkles className="w-4 h-4" />
-                  <span>Criar o meu plano</span>
+                  <span>Criar meu plano</span>
                 </>
               ) : (
                 <>

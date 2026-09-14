@@ -10,34 +10,60 @@ import type {
   FoodDiaryEntry,
   Goal,
   DayPlan,
-  AdminStats
+  AdminStats,
+  OwnerTelemetryData,
+  EnrichedOwnerUser
 } from '../types.ts';
 
 const TOKEN_KEY = 'fitlean_token';
 const USER_KEY = 'fitlean_user';
 
+// In-memory fallback if localStorage is blocked/disabled on mobile Safari
+const memoryStore: Record<string, string> = {};
+
 export const authStorage = {
   getToken(): string | null {
-    return localStorage.getItem(TOKEN_KEY);
+    try {
+      return localStorage.getItem(TOKEN_KEY) || memoryStore[TOKEN_KEY] || null;
+    } catch {
+      return memoryStore[TOKEN_KEY] || null;
+    }
   },
   setToken(token: string) {
-    localStorage.setItem(TOKEN_KEY, token);
+    try {
+      localStorage.setItem(TOKEN_KEY, token);
+    } catch {
+      // ignore
+    }
+    memoryStore[TOKEN_KEY] = token;
   },
   removeToken() {
-    localStorage.removeItem(TOKEN_KEY);
-    localStorage.removeItem(USER_KEY);
+    try {
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+    } catch {
+      // ignore
+    }
+    delete memoryStore[TOKEN_KEY];
+    delete memoryStore[USER_KEY];
   },
   getCachedUser(): User | null {
-    const raw = localStorage.getItem(USER_KEY);
-    if (!raw) return null;
     try {
+      const raw = localStorage.getItem(USER_KEY) || memoryStore[USER_KEY];
+      if (!raw) return null;
       return JSON.parse(raw);
     } catch {
       return null;
     }
   },
   setCachedUser(user: User) {
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+    try {
+      const serialized = JSON.stringify(user);
+      localStorage.setItem(USER_KEY, serialized);
+      memoryStore[USER_KEY] = serialized;
+    } catch {
+      memoryStore[USER_KEY] = JSON.stringify(user);
+    }
   }
 };
 
@@ -60,6 +86,10 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
   const data = await response.json().catch(() => ({}));
 
   if (!response.ok) {
+    // If unauthorized or token invalid, clean up stale credentials
+    if (response.status === 401 && !endpoint.includes('/api/auth/login') && !endpoint.includes('/api/owner/verify-key')) {
+      authStorage.removeToken();
+    }
     throw new Error(data.error || 'Ocorreu um erro no pedido.');
   }
 
@@ -80,6 +110,16 @@ export const api = {
 
   async login(body: { email: string; password: string }) {
     const res = await request<{ message: string; token: string; user: User }>('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+    authStorage.setToken(res.token);
+    authStorage.setCachedUser(res.user);
+    return res;
+  },
+
+  async activateAccount(body: { email: string; code?: string; name?: string; password?: string }) {
+    const res = await request<{ message: string; token: string; user: User }>('/api/auth/activate', {
       method: 'POST',
       body: JSON.stringify(body),
     });
@@ -184,6 +224,10 @@ export const api = {
 
   async getUserWorkouts() {
     return request<UserWorkoutLog[]>('/api/user/workouts');
+  },
+
+  async getWorkoutHistory() {
+    return this.getUserWorkouts();
   },
 
   async logCompletedWorkout(data: {
@@ -421,6 +465,42 @@ export const api = {
   async adminDeleteRecipe(id: string) {
     return request<{ message: string }>(`/api/admin/recipes/${id}`, {
       method: 'DELETE',
+    });
+  },
+
+  // Owner Private Telemetry & Master Control
+  async verifyOwnerKey(key: string) {
+    return request<{ success: boolean; message: string }>('/api/owner/verify-key', {
+      method: 'POST',
+      body: JSON.stringify({ key }),
+    });
+  },
+
+  async getOwnerTelemetry(key?: string) {
+    const query = key ? `?key=${encodeURIComponent(key)}` : '';
+    const headers = key ? { 'x-owner-key': key } : undefined;
+    return request<OwnerTelemetryData>(`/api/owner/telemetry${query}`, {
+      headers,
+    });
+  },
+
+  async updateUserStatusByOwner(userId: string, updates: { status?: string; role?: string }, key?: string) {
+    const query = key ? `?key=${encodeURIComponent(key)}` : '';
+    const headers = key ? { 'x-owner-key': key } : undefined;
+    return request<{ message: string; user: User | null }>(`/api/owner/users/${userId}/status${query}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(updates),
+    });
+  },
+
+  async resetUserPasswordByOwner(userId: string, newPassword?: string, key?: string) {
+    const query = key ? `?key=${encodeURIComponent(key)}` : '';
+    const headers = key ? { 'x-owner-key': key } : undefined;
+    return request<{ message: string; temporaryPassword: string }>(`/api/owner/users/${userId}/reset-password${query}`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({ newPassword }),
     });
   }
 };

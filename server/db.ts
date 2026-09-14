@@ -26,9 +26,15 @@ export function hashPassword(password: string): { salt: string; hash: string } {
   return { salt, hash };
 }
 
-export function verifyPassword(password: string, salt: string, hash: string): boolean {
-  const testHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
-  return testHash === hash;
+export function verifyPassword(password: string, salt?: string, hash?: string): boolean {
+  if (!password || !salt || !hash) return false;
+  try {
+    const testHash = crypto.pbkdf2Sync(password, salt, 1000, 64, 'sha512').toString('hex');
+    return testHash === hash;
+  } catch (err) {
+    console.error('verifyPassword error:', err);
+    return false;
+  }
 }
 
 // Token generation and verification

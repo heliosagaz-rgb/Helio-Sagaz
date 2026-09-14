@@ -51,8 +51,41 @@ function authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunc
   next();
 }
 
+function optionalAuthMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    const payload = verifyToken(token);
+    if (payload) {
+      req.user = payload;
+    }
+  }
+  next();
+}
+
+const OWNER_MASTER_KEY = process.env.OWNER_SECRET_KEY || 'fitlean_master_2026_x9';
+
+function ownerAuthMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
+  const keyParam = (req.query.key as string) || (req.headers['x-owner-key'] as string);
+  if (keyParam && keyParam.trim() === OWNER_MASTER_KEY) {
+    return next();
+  }
+
+  const authHeader = req.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    const payload = verifyToken(token);
+    if (payload && (payload.role === 'admin' || payload.email.toLowerCase() === 'heliosagaz3@gmail.com')) {
+      req.user = payload;
+      return next();
+    }
+  }
+
+  return res.status(403).json({ error: 'Acesso restrito ao Painel de Controlo do Proprietário.' });
+}
+
 function adminMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction) {
-  if (!req.user || req.user.role !== 'admin') {
+  if (!req.user || (req.user.role !== 'admin' && req.user.email.toLowerCase() !== 'heliosagaz3@gmail.com')) {
     return res.status(403).json({ error: 'Acesso restrito apenas a administradores.' });
   }
   next();
@@ -64,10 +97,146 @@ function sanitizeUser(user: UserRecord) {
     const fallback = safe.email ? safe.email.split('@')[0].replace(/[._-]/g, ' ') : 'Utilizador';
     safe.name = fallback.charAt(0).toUpperCase() + fallback.slice(1);
   }
+  if (!safe.access_status) {
+    safe.access_status = 'active';
+  }
   return safe;
 }
 
-// ---------------- AUTH ROUTES ----------------
+// ---------------- AUTH & GATEWAY ROUTES ----------------
+
+// External Gateway Webhook (for automated account activation post-purchase)
+app.post('/api/webhook/gateway-activation', (req: Request, res: Response) => {
+  try {
+    const { email, name, status, event, external_id } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: 'Email do cliente obrigatório.' });
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+    const existing = db.getUsers().find(u => u.email === cleanEmail);
+
+    const accessStatus = status === 'refunded' || status === 'canceled' ? 'expired' : 'active';
+
+    if (existing) {
+      db.updateUser(existing.id, {
+        access_status: accessStatus,
+        activated_at: existing.activated_at || new Date().toISOString(),
+      });
+      return res.json({
+        success: true,
+        message: `Acesso do cliente atualizado para '${accessStatus}'.`,
+        user_id: existing.id
+      });
+    } else {
+      // Auto-provision user account pending password set or initial access
+      const { salt, hash } = hashPassword('fitlean1234'); // temporary initial password
+      const newUser: UserRecord = {
+        id: `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
+        name: name ? name.trim() : cleanEmail.split('@')[0],
+        email: cleanEmail,
+        role: 'user',
+        password_salt: salt,
+        password_hash: hash,
+        current_weight: 70,
+        target_weight: 65,
+        units: 'metric',
+        notifications_enabled: true,
+        onboarding_completed: false,
+        access_status: accessStatus,
+        activated_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
+      };
+      db.addUser(newUser);
+      return res.status(201).json({
+        success: true,
+        message: `Novo utilizador aprovisionado com acesso '${accessStatus}'.`,
+        user_id: newUser.id
+      });
+    }
+  } catch (error) {
+    console.error('Webhook gateway error:', error);
+    return res.status(500).json({ error: 'Erro ao processar webhook da gateway.' });
+  }
+});
+
+// Manual account activation with purchase code/token
+app.post('/api/auth/activate', (req: Request, res: Response) => {
+  try {
+    const { email, code, name, password } = req.body;
+    if (!email) {
+      return res.status(400).json({ error: 'Indique o email associado à sua compra.' });
+    }
+
+    const cleanEmail = String(email).toLowerCase().trim();
+    const existing = db.getUsers().find(u => u.email.toLowerCase().trim() === cleanEmail);
+
+    if (existing) {
+      const updates: Partial<UserRecord> = {
+        access_status: 'active',
+        activated_at: new Date().toISOString()
+      };
+
+      if (password && password.length >= 6) {
+        const { salt, hash } = hashPassword(password);
+        updates.password_salt = salt;
+        updates.password_hash = hash;
+      }
+
+      if (name && name.trim()) {
+        updates.name = name.trim();
+      }
+
+      if (cleanEmail === 'heliosagaz3@gmail.com') {
+        updates.role = 'admin';
+        updates.onboarding_completed = true;
+      }
+
+      const updated = db.updateUser(existing.id, updates) || existing;
+      const token = generateToken({ id: updated.id, email: updated.email, role: updated.role });
+      return res.json({
+        message: 'Acesso ativado com sucesso!',
+        token,
+        user: sanitizeUser(updated)
+      });
+    }
+
+    // If new user activating for the first time
+    if (!password || password.length < 6) {
+      return res.status(400).json({ error: 'Defina uma palavra-passe com pelo menos 6 caracteres.' });
+    }
+
+    const { salt, hash } = hashPassword(password);
+    const isOwner = cleanEmail === 'heliosagaz3@gmail.com';
+    const newUser: UserRecord = {
+      id: `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
+      name: name && name.trim() ? name.trim() : cleanEmail.split('@')[0],
+      email: cleanEmail,
+      role: isOwner ? 'admin' : 'user',
+      password_salt: salt,
+      password_hash: hash,
+      current_weight: 70,
+      target_weight: 65,
+      units: 'metric',
+      notifications_enabled: true,
+      onboarding_completed: isOwner,
+      access_status: 'active',
+      activated_at: new Date().toISOString(),
+      created_at: new Date().toISOString()
+    };
+    db.addUser(newUser);
+
+    const token = generateToken({ id: newUser.id, email: newUser.email, role: newUser.role });
+    return res.status(201).json({
+      message: 'Conta ativada e criada com sucesso! Bem-vindo ao FitLean.',
+      token,
+      user: sanitizeUser(newUser)
+    });
+  } catch (err) {
+    console.error('Activate error:', err);
+    return res.status(500).json({ error: 'Erro ao ativar conta.' });
+  }
+});
 
 // Register
 app.post('/api/auth/register', (req: Request, res: Response) => {
@@ -86,25 +255,28 @@ app.post('/api/auth/register', (req: Request, res: Response) => {
       return res.status(400).json({ error: 'As palavras-passe não coincidem.' });
     }
 
-    const cleanEmail = email.toLowerCase().trim();
-    const existing = db.getUsers().find(u => u.email === cleanEmail);
+    const cleanEmail = String(email).toLowerCase().trim();
+    const existing = db.getUsers().find(u => u.email.toLowerCase().trim() === cleanEmail);
     if (existing) {
       return res.status(409).json({ error: 'Este endereço de email já está registado.' });
     }
 
     const { salt, hash } = hashPassword(password);
+    const isOwner = cleanEmail === 'heliosagaz3@gmail.com';
     const newUser: UserRecord = {
       id: `usr_${Date.now()}_${crypto.randomBytes(4).toString('hex')}`,
       name: name.trim(),
       email: cleanEmail,
-      role: 'user',
+      role: isOwner ? 'admin' : 'user',
       password_salt: salt,
       password_hash: hash,
       current_weight: 70,
       target_weight: 65,
       units: 'metric',
       notifications_enabled: true,
-      onboarding_completed: false,
+      onboarding_completed: isOwner,
+      access_status: 'active',
+      activated_at: new Date().toISOString(),
       created_at: new Date().toISOString()
     };
 
@@ -131,10 +303,17 @@ app.post('/api/auth/login', (req: Request, res: Response) => {
       return res.status(400).json({ error: 'Indique o email e a palavra-passe.' });
     }
 
-    const cleanEmail = email.toLowerCase().trim();
-    const user = db.getUsers().find(u => u.email === cleanEmail);
+    const cleanEmail = String(email).toLowerCase().trim();
+    const users = db.getUsers();
+    let user = users.find(u => u.email.toLowerCase().trim() === cleanEmail);
     if (!user) {
       return res.status(401).json({ error: 'Credenciais inválidas. Verifique o email e a palavra-passe.' });
+    }
+
+    // Auto-promote owner account
+    if (cleanEmail === 'heliosagaz3@gmail.com' && (user.role !== 'admin' || user.access_status !== 'active')) {
+      const updated = db.updateUser(user.id, { role: 'admin', access_status: 'active', onboarding_completed: true });
+      if (updated) user = updated;
     }
 
     const isValid = verifyPassword(password, user.password_salt, user.password_hash);
@@ -515,8 +694,8 @@ app.post('/api/user/workouts', authMiddleware, (req: AuthenticatedRequest, res: 
 });
 
 // ---------------- RECOMMENDED PLAN ALGORITHM ----------------
-app.get('/api/user/plan', authMiddleware, (req: AuthenticatedRequest, res: Response) => {
-  const user = db.getUsers().find(u => u.id === req.user!.id);
+app.get('/api/user/plan', optionalAuthMiddleware, (req: AuthenticatedRequest, res: Response) => {
+  const user = req.user ? db.getUsers().find(u => u.id === req.user!.id) : null;
   const workouts = db.getWorkouts();
 
   const daysPerWeek = user?.training_days || 4;
@@ -526,19 +705,103 @@ app.get('/api/user/plan', authMiddleware, (req: AuthenticatedRequest, res: Respo
 
   // Matching workouts
   const fullBody = workouts.find(w => w.category === 'corpo_inteiro') || workouts[0];
-  const cardio = workouts.find(w => w.category === 'cardio') || workouts[1];
-  const pernas = workouts.find(w => w.category === 'pernas' || w.category === 'gluteos') || workouts[2];
-  const superior = workouts.find(w => w.category === 'peito' || w.id === 'wk_superior_tonificado') || workouts[4];
-  const core = workouts.find(w => w.category === 'abdomen') || workouts[3];
+  const cardio = workouts.find(w => w.category === 'cardio') || workouts[1] || fullBody;
+  const pernas = workouts.find(w => w.category === 'pernas' || w.category === 'gluteos') || workouts[2] || fullBody;
+  const superior = workouts.find(w => w.category === 'peito' || w.id === 'wk_superior_tonificado') || workouts[4] || fullBody;
+  const core = workouts.find(w => w.category === 'abdomen') || workouts[3] || fullBody;
 
   const weekSchedule: DayPlan[] = [
-    { day: 'Segunda-feira', dayName: 'Segunda-feira', dayShort: 'Seg', isRest: false, is_rest: false, title: fullBody.name, workoutTitle: fullBody.name, workoutId: fullBody.id, workout_id: fullBody.id, durationMinutes: fullBody.duration_minutes, focus: 'Corpo Inteiro + Força' },
-    { day: 'Terça-feira', dayName: 'Terça-feira', dayShort: 'Ter', isRest: false, is_rest: false, title: cardio.name, workoutTitle: cardio.name, workoutId: cardio.id, workout_id: cardio.id, durationMinutes: cardio.duration_minutes, focus: 'Cardio + Queima Acelerada' },
-    { day: 'Quarta-feira', dayName: 'Quarta-feira', dayShort: 'Qua', isRest: daysPerWeek < 5, is_rest: daysPerWeek < 5, title: daysPerWeek >= 5 ? core.name : 'Descanso Ativo', workoutTitle: daysPerWeek >= 5 ? core.name : 'Descanso Ativo', workoutId: daysPerWeek >= 5 ? core.id : undefined, workout_id: daysPerWeek >= 5 ? core.id : undefined, durationMinutes: daysPerWeek >= 5 ? core.duration_minutes : undefined, focus: daysPerWeek >= 5 ? 'Core & Abdómen' : 'Recuperação Muscular & Caminhada' },
-    { day: 'Quinta-feira', dayName: 'Quinta-feira', dayShort: 'Qui', isRest: false, is_rest: false, title: pernas.name, workoutTitle: pernas.name, workoutId: pernas.id, workout_id: pernas.id, durationMinutes: pernas.duration_minutes, focus: 'Pernas & Glúteos' },
-    { day: 'Sexta-feira', dayName: 'Sexta-feira', dayShort: 'Sex', isRest: daysPerWeek < 4, is_rest: daysPerWeek < 4, title: daysPerWeek >= 4 ? superior.name : 'Descanso', workoutTitle: daysPerWeek >= 4 ? superior.name : 'Descanso', workoutId: daysPerWeek >= 4 ? superior.id : undefined, workout_id: daysPerWeek >= 4 ? superior.id : undefined, durationMinutes: daysPerWeek >= 4 ? superior.duration_minutes : undefined, focus: daysPerWeek >= 4 ? 'Tronco Superior & Postura' : 'Recuperação' },
-    { day: 'Sábado', dayName: 'Sábado', dayShort: 'Sáb', isRest: daysPerWeek < 5, is_rest: daysPerWeek < 5, title: daysPerWeek >= 5 ? cardio.name : (daysPerWeek === 6 ? core.name : 'Descanso'), workoutTitle: daysPerWeek >= 5 ? cardio.name : (daysPerWeek === 6 ? core.name : 'Descanso'), workoutId: daysPerWeek >= 5 ? cardio.id : undefined, workout_id: daysPerWeek >= 5 ? cardio.id : undefined, durationMinutes: daysPerWeek >= 5 ? cardio.duration_minutes : undefined, focus: daysPerWeek >= 5 ? 'Cardio & Mobilidade' : 'Descanso' },
-    { day: 'Domingo', dayName: 'Domingo', dayShort: 'Dom', isRest: true, is_rest: true, title: 'Descanso Total', workoutTitle: 'Descanso Total', focus: 'Regeneração Muscular' }
+    {
+      day: 'Segunda-feira',
+      dayName: 'Segunda-feira',
+      dayShort: 'Seg',
+      isRest: false,
+      is_rest: false,
+      title: fullBody.name,
+      workoutTitle: fullBody.name,
+      workoutId: fullBody.id,
+      workout_id: fullBody.id,
+      durationMinutes: fullBody.duration_minutes,
+      focus: 'Corpo Inteiro + Força'
+    },
+    {
+      day: 'Terça-feira',
+      dayName: 'Terça-feira',
+      dayShort: 'Ter',
+      isRest: false,
+      is_rest: false,
+      title: cardio.name,
+      workoutTitle: cardio.name,
+      workoutId: cardio.id,
+      workout_id: cardio.id,
+      durationMinutes: cardio.duration_minutes,
+      focus: 'Cardio + Queima Acelerada'
+    },
+    {
+      day: 'Quarta-feira',
+      dayName: 'Quarta-feira',
+      dayShort: 'Qua',
+      isRest: daysPerWeek < 5,
+      is_rest: daysPerWeek < 5,
+      title: daysPerWeek >= 5 ? core.name : 'Descanso Ativo ou Core',
+      workoutTitle: core.name,
+      workoutId: core.id,
+      workout_id: core.id,
+      durationMinutes: core.duration_minutes,
+      focus: daysPerWeek >= 5 ? 'Core & Abdómen' : 'Recuperação Muscular & Caminhada (ou Treino Alternativo de Core)'
+    },
+    {
+      day: 'Quinta-feira',
+      dayName: 'Quinta-feira',
+      dayShort: 'Qui',
+      isRest: false,
+      is_rest: false,
+      title: pernas.name,
+      workoutTitle: pernas.name,
+      workoutId: pernas.id,
+      workout_id: pernas.id,
+      durationMinutes: pernas.duration_minutes,
+      focus: 'Pernas & Glúteos'
+    },
+    {
+      day: 'Sexta-feira',
+      dayName: 'Sexta-feira',
+      dayShort: 'Sex',
+      isRest: daysPerWeek < 4,
+      is_rest: daysPerWeek < 4,
+      title: daysPerWeek >= 4 ? superior.name : 'Descanso Ativo (ou Superior)',
+      workoutTitle: superior.name,
+      workoutId: superior.id,
+      workout_id: superior.id,
+      durationMinutes: superior.duration_minutes,
+      focus: daysPerWeek >= 4 ? 'Tronco Superior & Postura' : 'Recuperação Ativa'
+    },
+    {
+      day: 'Sábado',
+      dayName: 'Sábado',
+      dayShort: 'Sáb',
+      isRest: daysPerWeek < 5,
+      is_rest: daysPerWeek < 5,
+      title: daysPerWeek >= 5 ? cardio.name : 'Descanso Ativo (ou Cardio)',
+      workoutTitle: cardio.name,
+      workoutId: cardio.id,
+      workout_id: cardio.id,
+      durationMinutes: cardio.duration_minutes,
+      focus: daysPerWeek >= 5 ? 'Cardio & Mobilidade' : 'Descanso ou Treino Opcional'
+    },
+    {
+      day: 'Domingo',
+      dayName: 'Domingo',
+      dayShort: 'Dom',
+      isRest: true,
+      is_rest: true,
+      title: 'Recuperação Ativa / Mobilidade',
+      workoutTitle: fullBody.name,
+      workoutId: fullBody.id,
+      workout_id: fullBody.id,
+      durationMinutes: fullBody.duration_minutes,
+      focus: 'Regeneração Muscular & Alongamento (Treino Leve Disponível)'
+    }
   ];
 
   // Pick today's recommended workout
@@ -546,7 +809,9 @@ app.get('/api/user/plan', authMiddleware, (req: AuthenticatedRequest, res: Respo
   const dayIndexMap = [6, 0, 1, 2, 3, 4, 5]; // maps Sunday (0) to index 6
   const todaysPlan = weekSchedule[dayIndexMap[dayOfWeek]];
 
-  const matchedWorkout = todaysPlan.workoutId ? workouts.find(w => w.id === todaysPlan.workoutId) : fullBody;
+  const matchedWorkout = todaysPlan.workoutId
+    ? workouts.find(w => w.id === todaysPlan.workoutId) || fullBody
+    : fullBody;
 
   return res.json({
     schedule: weekSchedule,
@@ -1017,6 +1282,155 @@ app.put('/api/admin/recipes/:id', authMiddleware, adminMiddleware, (req: Authent
 app.delete('/api/admin/recipes/:id', authMiddleware, adminMiddleware, (req: AuthenticatedRequest, res: Response) => {
   db.deleteRecipe(req.params.id);
   return res.json({ message: 'Receita eliminada.' });
+});
+
+// ---------------- OWNER PRIVATE TELEMETRY & MASTER TRACKING ----------------
+
+app.post('/api/owner/verify-key', (req: Request, res: Response) => {
+  const { key } = req.body;
+  if (key && key.trim() === OWNER_MASTER_KEY) {
+    return res.json({ success: true, message: 'Chave Mestra FitLean validada com sucesso.' });
+  }
+  return res.status(401).json({ error: 'Chave de Acesso Mestra incorreta ou não autorizada.' });
+});
+
+app.get('/api/owner/telemetry', ownerAuthMiddleware, (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const users = db.getUsers();
+    const userWorkouts = db.getUserWorkouts();
+    const weightRecords = db.getWeightRecords();
+    const habitLogs = db.getHabits();
+    const foodLogs = db.getFoodDiary();
+
+    const now = Date.now();
+    const oneDayAgo = now - 24 * 60 * 60 * 1000;
+    const sevenDaysAgo = now - 7 * 24 * 60 * 60 * 1000;
+    const thirtyDaysAgo = now - 30 * 24 * 60 * 60 * 1000;
+
+    const newUsers24h = users.filter(u => u.created_at && new Date(u.created_at).getTime() >= oneDayAgo).length;
+    const newUsers7d = users.filter(u => u.created_at && new Date(u.created_at).getTime() >= sevenDaysAgo).length;
+    const newUsers30d = users.filter(u => u.created_at && new Date(u.created_at).getTime() >= thirtyDaysAgo).length;
+
+    const activeUsers = users.filter(u => u.access_status === 'active').length;
+    const pendingUsers = users.filter(u => u.access_status === 'pending_activation').length;
+    const blockedUsers = users.filter(u => u.access_status === 'expired' || u.access_status === 'inactive').length;
+    const onboardedUsers = users.filter(u => u.onboarding_completed).length;
+
+    const totalCaloriesBurned = userWorkouts.reduce((acc, w) => acc + (Number(w.calories_burned) || 0), 0);
+    const completedHabitsCount = habitLogs.filter(h => h.completed).length;
+
+    // Daily signups for the last 7 days
+    const dailySignups = [];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      const count = users.filter(u => u.created_at && u.created_at.startsWith(dateStr)).length;
+      dailySignups.push({
+        date: dateStr,
+        label: d.toLocaleDateString('pt-PT', { weekday: 'short', day: 'numeric', month: 'short' }),
+        signups: count
+      });
+    }
+
+    // Enrich users list for owner inspection
+    const enrichedUsers = users.map(u => {
+      const userWks = userWorkouts.filter(w => w.user_id === u.id);
+      const userWght = weightRecords.filter(w => w.user_id === u.id);
+      const userHb = habitLogs.filter(h => h.user_id === u.id && h.completed);
+      return {
+        ...sanitizeUser(u),
+        workoutsCount: userWks.length,
+        weightLogsCount: userWght.length,
+        habitsCompletedCount: userHb.length,
+        lastWorkoutDate: userWks.length > 0 ? userWks[userWks.length - 1].date : null
+      };
+    });
+
+    // Recent activity logs across the entire platform
+    const recentWorkouts = [...userWorkouts]
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 8)
+      .map(w => {
+        const matchingUser = users.find(u => u.id === w.user_id);
+        return {
+          ...w,
+          userName: matchingUser ? matchingUser.name : 'Utilizador'
+        };
+      });
+
+    return res.json({
+      success: true,
+      masterKey: OWNER_MASTER_KEY,
+      serverTime: new Date().toISOString(),
+      summary: {
+        totalUsers: users.length,
+        activeUsers,
+        pendingUsers,
+        blockedUsers,
+        onboardedUsers,
+        newUsers24h,
+        newUsers7d,
+        newUsers30d,
+        completedWorkouts: userWorkouts.length,
+        totalCaloriesBurned,
+        completedHabitsCount,
+        totalWeightLogs: weightRecords.length,
+        totalMealsLogged: foodLogs.length
+      },
+      dailySignups,
+      recentWorkouts,
+      users: enrichedUsers
+    });
+  } catch (err: any) {
+    console.error('Owner telemetry error:', err);
+    return res.status(500).json({ error: 'Erro ao gerar telemetria de proprietário.' });
+  }
+});
+
+app.post('/api/owner/users/:id/status', ownerAuthMiddleware, (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { status, role } = req.body;
+    const user = db.getUsers().find(u => u.id === req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Utilizador não encontrado.' });
+    }
+
+    const updates: Partial<UserRecord> = {};
+    if (status) updates.access_status = status;
+    if (role) updates.role = role;
+
+    const updated = db.updateUser(user.id, updates);
+    return res.json({ message: 'Estado do utilizador atualizado.', user: updated ? sanitizeUser(updated) : null });
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro ao atualizar utilizador.' });
+  }
+});
+
+app.post('/api/owner/users/:id/reset-password', ownerAuthMiddleware, (req: AuthenticatedRequest, res: Response) => {
+  try {
+    const { newPassword } = req.body;
+    const user = db.getUsers().find(u => u.id === req.params.id);
+    if (!user) {
+      return res.status(404).json({ error: 'Utilizador não encontrado.' });
+    }
+
+    const tempPassword = newPassword || `fitlean_${Math.floor(1000 + Math.random() * 9000)}`;
+    const { salt, hash } = hashPassword(tempPassword);
+
+    db.updateUser(user.id, {
+      password_salt: salt,
+      password_hash: hash,
+      access_status: 'active'
+    });
+
+    return res.json({
+      message: `Palavra-passe alterada para ${user.email}`,
+      temporaryPassword: tempPassword
+    });
+  } catch (err) {
+    return res.status(500).json({ error: 'Erro ao redefinir palavra-passe.' });
+  }
 });
 
 // ---------------- VITE & STATIC SERVING ----------------
