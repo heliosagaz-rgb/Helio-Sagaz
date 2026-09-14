@@ -156,20 +156,20 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <button
                 type="button"
                 onClick={() => onNavigate('login')}
                 className="text-xs font-bold text-stone-700 dark:text-stone-300 hover:text-emerald-600 dark:hover:text-emerald-400 px-3 py-2 rounded-xl transition-colors cursor-pointer"
               >
-                Já tenho acesso
+                Entrar
               </button>
               <button
                 type="button"
-                onClick={() => onNavigate('activate')}
+                onClick={() => onNavigate('register')}
                 className="text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-500 px-3.5 py-2 rounded-xl transition-all shadow-md shadow-emerald-600/20 cursor-pointer"
               >
-                Ativar conta
+                Criar Conta
               </button>
             </div>
           )}

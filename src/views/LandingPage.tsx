@@ -22,10 +22,11 @@ import {
 interface LandingPageProps {
   onStart: () => void; // Open login / access
   onLogin: () => void;
+  onRegister?: () => void;
   onActivate?: () => void;
 }
 
-export const LandingPage: React.FC<LandingPageProps> = ({ onStart, onLogin, onActivate }) => {
+export const LandingPage: React.FC<LandingPageProps> = ({ onStart, onLogin, onRegister, onActivate }) => {
   return (
     <div className="bg-white dark:bg-stone-950 text-stone-900 dark:text-stone-100 selection:bg-emerald-100 selection:text-emerald-900 transition-colors">
       {/* 1. HERO SECTION */}
@@ -44,17 +45,28 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart, onLogin, onAc
             Treinos personalizados, alimentação e acompanhamento em uma única plataforma.
           </p>
 
-          {/* Call to Actions - Strictly per User Specification */}
+          {/* Call to Actions */}
           <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3.5">
-            {/* Primary Button: Já tenho acesso */}
+            {/* Primary Button: Entrar / Já tenho acesso */}
             <button
               id="hero-btn-have-access"
               type="button"
               onClick={onLogin}
-              className="w-full sm:w-auto px-8 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm sm:text-base transition-all shadow-lg hover:shadow-emerald-600/25 flex items-center justify-center gap-2.5 active:scale-[0.99] cursor-pointer"
+              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-sm sm:text-base transition-all shadow-lg hover:shadow-emerald-600/25 flex items-center justify-center gap-2.5 active:scale-[0.99] cursor-pointer"
             >
-              <span>Já tenho acesso</span>
+              <span>Entrar / Aceder</span>
               <ArrowRight className="w-4 h-4" />
+            </button>
+
+            {/* Secondary Button: Criar Conta */}
+            <button
+              id="hero-btn-register"
+              type="button"
+              onClick={onRegister || onLogin}
+              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-stone-900 hover:bg-stone-800 dark:bg-stone-800 dark:hover:bg-stone-700 text-white font-bold text-sm sm:text-base transition-all text-center flex items-center justify-center gap-2 shadow-md hover:scale-[1.01] cursor-pointer"
+            >
+              <span>Criar Conta</span>
+              <Sparkles className="w-4 h-4 text-emerald-400" />
             </button>
 
             {/* Commercial CTA Button: Quero transformar meu corpo -> CHECKOUT_URL */}
@@ -63,10 +75,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart, onLogin, onAc
               href={CHECKOUT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto px-7 py-4 rounded-2xl bg-stone-900 hover:bg-stone-800 dark:bg-stone-800 dark:hover:bg-stone-700 text-white font-bold text-sm sm:text-base transition-all text-center flex items-center justify-center gap-2 shadow-md hover:scale-[1.01]"
+              className="w-full sm:w-auto px-6 py-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-300 dark:border-emerald-800 text-emerald-800 dark:text-emerald-300 font-bold text-sm sm:text-base transition-all text-center flex items-center justify-center gap-2 shadow-xs"
             >
-              <span>Quero transformar meu corpo</span>
-              <ChevronRight className="w-4 h-4 text-emerald-400" />
+              <span>Adquirir FitLean</span>
+              <ChevronRight className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             </a>
           </div>
 

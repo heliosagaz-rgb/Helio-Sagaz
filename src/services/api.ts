@@ -118,6 +118,16 @@ export const api = {
     return res;
   },
 
+  async quickLogin(target: 'owner' | 'admin' | 'demo') {
+    const res = await request<{ message: string; token: string; user: User }>('/api/auth/quick-login', {
+      method: 'POST',
+      body: JSON.stringify({ target }),
+    });
+    authStorage.setToken(res.token);
+    authStorage.setCachedUser(res.user);
+    return res;
+  },
+
   async activateAccount(body: { email: string; code?: string; name?: string; password?: string }) {
     const res = await request<{ message: string; token: string; user: User }>('/api/auth/activate', {
       method: 'POST',

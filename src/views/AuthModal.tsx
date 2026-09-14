@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   KeyRound,
   ExternalLink,
+  Sparkles,
   X
 } from 'lucide-react';
 
@@ -72,6 +73,41 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanEmail = email.trim().toLowerCase();
+    if (!cleanEmail || !password) {
+      setErrorMsg('Preencha o email e a palavra-passe.');
+      return;
+    }
+    if (password.length < 6) {
+      setErrorMsg('A palavra-passe deve ter pelo menos 6 caracteres.');
+      return;
+    }
+    if (confirmPassword && password !== confirmPassword) {
+      setErrorMsg('As palavras-passe não coincidem.');
+      return;
+    }
+    setErrorMsg('');
+    setLoading(true);
+    try {
+      const res = await api.register({
+        name: name.trim() || cleanEmail.split('@')[0],
+        email: cleanEmail,
+        password,
+        confirmPassword: confirmPassword || password,
+      });
+      setSuccessMsg('Conta pronta com sucesso! A entrar...');
+      setTimeout(() => {
+        onSuccess(res.user);
+      }, 500);
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Falha ao criar conta.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleActivate = async (e: React.FormEvent) => {
     e.preventDefault();
     const cleanEmail = email.trim().toLowerCase();
@@ -95,7 +131,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       setSuccessMsg('Conta ativada com sucesso! A entrar...');
       setTimeout(() => {
         onSuccess(res.user);
-      }, 700);
+      }, 600);
     } catch (err: any) {
       setErrorMsg(err.message || 'Erro ao ativar conta.');
     } finally {
@@ -103,28 +139,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
     }
   };
 
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleanEmail = email.trim().toLowerCase();
-    if (!name.trim() || !cleanEmail || !password) {
-      setErrorMsg('Preencha todos os campos obrigatórios.');
-      return;
-    }
-    if (password !== confirmPassword) {
-      setErrorMsg('As palavras-passe não coincidem.');
-      return;
-    }
-    if (password.length < 6) {
-      setErrorMsg('A palavra-passe deve ter pelo menos 6 caracteres.');
-      return;
-    }
-    setErrorMsg('');
+  const handleQuickLogin = async (target: 'owner' | 'demo') => {
+    resetForm();
     setLoading(true);
     try {
-      const res = await api.register({ name: name.trim(), email: cleanEmail, password, confirmPassword });
+      const res = await api.quickLogin(target);
       onSuccess(res.user);
     } catch (err: any) {
-      setErrorMsg(err.message || 'Falha ao criar conta.');
+      setErrorMsg(err.message || 'Falha no acesso rápido.');
     } finally {
       setLoading(false);
     }
@@ -191,7 +213,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         )}
 
         {/* Brand Icon Header */}
-        <div className="flex items-center gap-2 mb-6">
+        <div className="flex items-center gap-2.5 mb-5">
           <div className="w-10 h-10 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
             <Flame className="w-6 h-6 fill-white" />
           </div>
@@ -200,10 +222,61 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               Fit<span className="text-emerald-600 dark:text-emerald-400">Lean</span>
             </span>
             <span className="text-[10px] text-stone-400 dark:text-stone-400 font-semibold uppercase tracking-wider">
-              Área de Membros
+              Acesso à Plataforma
             </span>
           </div>
         </div>
+
+        {/* Navigation Mode Tabs */}
+        {(mode === 'login' || mode === 'register' || mode === 'activate') && (
+          <div className="flex items-center p-1 bg-stone-100 dark:bg-stone-800 rounded-2xl mb-6">
+            <button
+              id="auth-tab-login"
+              type="button"
+              onClick={() => {
+                resetForm();
+                setMode('login');
+              }}
+              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                mode === 'login'
+                  ? 'bg-white dark:bg-stone-700 text-emerald-600 dark:text-emerald-400 shadow-xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+              }`}
+            >
+              Iniciar Sessão
+            </button>
+            <button
+              id="auth-tab-register"
+              type="button"
+              onClick={() => {
+                resetForm();
+                setMode('register');
+              }}
+              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                mode === 'register'
+                  ? 'bg-white dark:bg-stone-700 text-emerald-600 dark:text-emerald-400 shadow-xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+              }`}
+            >
+              Criar Conta
+            </button>
+            <button
+              id="auth-tab-activate"
+              type="button"
+              onClick={() => {
+                resetForm();
+                setMode('activate');
+              }}
+              className={`flex-1 py-2 text-xs font-bold rounded-xl transition-all cursor-pointer ${
+                mode === 'activate'
+                  ? 'bg-white dark:bg-stone-700 text-emerald-600 dark:text-emerald-400 shadow-xs'
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
+              }`}
+            >
+              Ativar
+            </button>
+          </div>
+        )}
 
         {/* Feedback Messages */}
         {errorMsg && (
@@ -223,12 +296,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {/* ---------------- 1. LOGIN MODE ---------------- */}
         {mode === 'login' && (
           <div>
-            <div className="mb-6">
-              <h2 className="text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
-                Bem-vindo de volta 👋
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
+                Iniciar Sessão 👋
               </h2>
-              <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
-                Continue a sua transformação.
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                Introduza as suas credenciais para aceder aos seus treinos e metas.
               </p>
             </div>
 
@@ -240,6 +313,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 <div className="relative">
                   <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
                   <input
+                    id="input-login-email"
                     type="email"
                     required
                     value={email}
@@ -264,14 +338,15 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       resetForm();
                       setMode('recovery');
                     }}
-                    className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-semibold"
+                    className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-semibold cursor-pointer"
                   >
-                    Esqueci-me da palavra-passe
+                    Esqueci-me
                   </button>
                 </div>
                 <div className="relative">
                   <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
                   <input
+                    id="input-login-password"
                     type={showPassword ? 'text' : 'password'}
                     required
                     value={password}
@@ -283,6 +358,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
+                    title={showPassword ? 'Ocultar palavra-passe' : 'Mostrar palavra-passe'}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -306,46 +382,196 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               </button>
             </form>
 
-            {/* Links at bottom of Login */}
-            <div className="mt-6 pt-5 border-t border-stone-100 dark:border-stone-800 space-y-3 text-center text-xs text-stone-500 dark:text-stone-400">
-              <div className="flex items-center justify-center gap-1.5">
-                <span>Ainda não tenho acesso?</span>
-                <a
-                  href={CHECKOUT_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1"
-                >
-                  <span>Adquirir o FitLean</span>
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-
-              <div>
+            {/* Quick 1-Click Access for Owner and Demo */}
+            <div className="mt-5 pt-4 border-t border-stone-100 dark:border-stone-800">
+              <span className="block text-[11px] font-bold text-stone-400 dark:text-stone-500 uppercase tracking-wider mb-2 text-center">
+                Acesso Instantâneo
+              </span>
+              <div className="grid grid-cols-2 gap-2">
                 <button
+                  id="btn-quick-owner"
                   type="button"
-                  onClick={() => {
-                    resetForm();
-                    setMode('activate');
-                  }}
-                  className="text-stone-600 dark:text-stone-300 hover:text-emerald-600 dark:hover:text-emerald-400 font-semibold"
+                  onClick={() => handleQuickLogin('owner')}
+                  disabled={loading}
+                  className="py-2.5 px-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 hover:bg-emerald-100 dark:hover:bg-emerald-900/50 border border-emerald-200/80 dark:border-emerald-800/80 text-emerald-800 dark:text-emerald-300 text-xs font-bold transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
+                  title="Entrar diretamente como heliosagaz3@gmail.com"
                 >
-                  Já comprou na gateway? Ative o seu acesso aqui
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  <span>Proprietário</span>
+                </button>
+
+                <button
+                  id="btn-quick-demo"
+                  type="button"
+                  onClick={() => handleQuickLogin('demo')}
+                  disabled={loading}
+                  className="py-2.5 px-3 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 text-xs font-bold transition-all text-center flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
+                  title="Entrar com conta de testes (Ana Silva)"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  <span>Demo (Ana Silva)</span>
                 </button>
               </div>
+            </div>
+
+            <div className="mt-4 text-center text-xs text-stone-500 dark:text-stone-400">
+              <span>Ainda não tem conta? </span>
+              <button
+                type="button"
+                onClick={() => {
+                  resetForm();
+                  setMode('register');
+                }}
+                className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+              >
+                Criar Conta Grátis
+              </button>
             </div>
           </div>
         )}
 
-        {/* ---------------- 2. ACTIVATE MODE ---------------- */}
+        {/* ---------------- 2. REGISTER MODE ---------------- */}
+        {mode === 'register' && (
+          <div>
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
+                Criar Nova Conta ✨
+              </h2>
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                Comece agora o seu plano de treinos e alimentação saudável.
+              </p>
+            </div>
+
+            <form onSubmit={handleRegister} className="space-y-3.5">
+              <div>
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
+                  Nome Completo
+                </label>
+                <div className="relative">
+                  <UserIcon className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <input
+                    id="input-register-name"
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="Seu nome"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
+                  Email
+                </label>
+                <div className="relative">
+                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <input
+                    id="input-register-email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="seu.email@exemplo.com"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
+                  Palavra-passe (mín. 6 caracteres)
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <input
+                    id="input-register-password"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Mínimo 6 caracteres"
+                    className="w-full pl-10 pr-10 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
+                  Confirmar Palavra-passe
+                </label>
+                <div className="relative">
+                  <Lock className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
+                  <input
+                    id="input-register-confirm"
+                    type={showPassword ? 'text' : 'password'}
+                    required
+                    minLength={6}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Repita a palavra-passe"
+                    className="w-full pl-10 pr-4 py-3 rounded-2xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800 text-stone-900 dark:text-stone-100 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-500"
+                  />
+                </div>
+              </div>
+
+              <button
+                id="btn-register-submit"
+                type="submit"
+                disabled={loading}
+                className="w-full py-3.5 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm transition-all shadow-lg hover:shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-60 active:scale-[0.99]"
+              >
+                {loading ? (
+                  <span className="flex items-center gap-2">
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    <span>A criar conta...</span>
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5">
+                    <span>Criar Conta e Começar</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </span>
+                )}
+              </button>
+            </form>
+
+            <div className="mt-4 text-center text-xs text-stone-500 dark:text-stone-400">
+              <span>Já tem uma conta registada? </span>
+              <button
+                type="button"
+                onClick={() => {
+                  resetForm();
+                  setMode('login');
+                }}
+                className="font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"
+              >
+                Iniciar Sessão
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ---------------- 3. ACTIVATE MODE ---------------- */}
         {mode === 'activate' && (
           <div>
-            <div className="mb-6">
-              <h2 className="text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
                 Ativar o seu Acesso 🔑
               </h2>
-              <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
-                Insira o email utilizado na compra para ativar o FitLean.
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
+                Insira o email utilizado na compra para desbloquear o FitLean.
               </p>
             </div>
 
@@ -369,7 +595,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-stone-700 dark:text-stone-300 mb-1.5">
-                  Seu Nome
+                  Seu Nome (opcional)
                 </label>
                 <div className="relative">
                   <UserIcon className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-stone-400" />
@@ -417,7 +643,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   resetForm();
                   setMode('login');
                 }}
-                className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 font-semibold"
+                className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 font-semibold cursor-pointer"
               >
                 Voltar para o Login
               </button>
@@ -425,14 +651,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
         )}
 
-        {/* ---------------- 3. RECOVERY MODE ---------------- */}
+        {/* ---------------- 4. RECOVERY MODE ---------------- */}
         {mode === 'recovery' && (
           <div>
-            <div className="mb-6">
-              <h2 className="text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
                 Recuperar Acesso 🔒
               </h2>
-              <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
                 Indique o seu email para receber o código de recuperação.
               </p>
             </div>
@@ -471,7 +697,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   resetForm();
                   setMode('login');
                 }}
-                className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 font-semibold"
+                className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 font-semibold cursor-pointer"
               >
                 Voltar para o Login
               </button>
@@ -479,14 +705,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
         )}
 
-        {/* ---------------- 4. RESET PASSWORD MODE ---------------- */}
+        {/* ---------------- 5. RESET PASSWORD MODE ---------------- */}
         {mode === 'reset' && (
           <div>
-            <div className="mb-6">
-              <h2 className="text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
+            <div className="mb-5">
+              <h2 className="text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 tracking-tight">
                 Nova Palavra-passe 🔑
               </h2>
-              <p className="text-xs sm:text-sm text-stone-500 dark:text-stone-400 mt-1">
+              <p className="text-xs text-stone-500 dark:text-stone-400 mt-1">
                 Introduza o código recebido e a nova palavra-passe.
               </p>
             </div>
@@ -549,7 +775,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   resetForm();
                   setMode('login');
                 }}
-                className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 font-semibold"
+                className="text-xs text-stone-500 dark:text-stone-400 hover:text-stone-800 dark:hover:text-stone-200 font-semibold cursor-pointer"
               >
                 Cancelar e voltar ao Login
               </button>

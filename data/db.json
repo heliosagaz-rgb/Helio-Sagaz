@@ -44,14 +44,15 @@
       "units": "metric",
       "notifications_enabled": true,
       "onboarding_completed": true,
-      "created_at": "2026-08-23T22:14:49.538Z"
+      "created_at": "2026-08-23T22:14:49.538Z",
+      "access_status": "active"
     },
     {
       "id": "usr_1789338252853_26c65c29",
       "email": "heliosagaz3@gmail.com",
       "role": "admin",
-      "password_salt": "be0eff8dfda948e29ed33f4c04006998",
-      "password_hash": "305b9c4e40939281b5048534884392fc56bc397ecc08ab0286d784e25d29b2c75866ab21e02ca012f79f626a5fd4b291c6e6b9867093721238b2dc89bae72031",
+      "password_salt": "ffe9099e84e232f67023a7e0a0741e85",
+      "password_hash": "0ede6771132c8f933083a069c5514458e75ee046ac0aac03419c0a2bebb966229543cc159f1dd0a8a3b29ce09212e8329f83be6034e579934f34752c4dc772e7",
       "current_weight": 73,
       "target_weight": 65,
       "units": "metric",
@@ -69,6 +70,22 @@
       "time_available": 30,
       "name": "Heliosagaz3",
       "access_status": "active"
+    },
+    {
+      "id": "usr_1789427592301_742add35",
+      "name": "Novo Teste",
+      "email": "novousuario@teste.com",
+      "role": "user",
+      "password_salt": "3bcf90c83966061a20db2decbac578e2",
+      "password_hash": "18bb2ec0d8d011d27ee0466a839ee5b7ac511b6944d92bfc9c393e4327643092bb5e55d038f28fc00c2145bfe0d913084518610d584382ac496f988292a66b8e",
+      "current_weight": 70,
+      "target_weight": 65,
+      "units": "metric",
+      "notifications_enabled": true,
+      "onboarding_completed": false,
+      "access_status": "active",
+      "activated_at": "2026-09-14T23:13:12.301Z",
+      "created_at": "2026-09-14T23:13:12.301Z"
     }
   ],
   "exercises": [

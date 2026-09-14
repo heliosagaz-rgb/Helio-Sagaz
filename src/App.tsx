@@ -307,11 +307,15 @@ export default function App() {
         <main className="flex-1">
           <LandingPage
             onStart={() => {
-              setAuthModalMode('activate');
+              setAuthModalMode('register');
               setAuthModalOpen(true);
             }}
             onLogin={() => {
               setAuthModalMode('login');
+              setAuthModalOpen(true);
+            }}
+            onRegister={() => {
+              setAuthModalMode('register');
               setAuthModalOpen(true);
             }}
             onActivate={() => {
